@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from core.models import Usuario, Rol
+import cx_Oracle
 
 def inicio(request):
     

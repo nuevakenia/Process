@@ -17,3 +17,5 @@ class Usuario(models.Model):
     telefono = models.CharField(max_length=99)
     def __str__(self):
         return self.nombre
+
+        
