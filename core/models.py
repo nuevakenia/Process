@@ -7,9 +7,13 @@ import datetime
 
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nombre_completo = models.CharField(max_length=99)
+    nombre = models.CharField(max_length=99)
+    apellidop = models.CharField(max_length=99)
+    apellidom = models.CharField(max_length=99)
     cargo = models.CharField(max_length=50)
     id_rol = models.OneToOneField('Rol', on_delete=models.CASCADE)
+    def __str__(self):
+            return self.nombre
 
 class Rol(models.Model):
     id_rol = models.IntegerField(primary_key=True)
@@ -42,8 +46,10 @@ class Documento(models.Model):
 
 class Tablero(models.Model):
     id_tablero = models.IntegerField(primary_key=True)
-    fecha_creacion = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     nombre = models.CharField(max_length=99)
+    descripcion = models.CharField(max_length=255)
+    def __str__(self):
+            return self.nombre
 
 class Columna(models.Model):
     id_columna = models.IntegerField(primary_key=True)
