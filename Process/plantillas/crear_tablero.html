@@ -6,21 +6,26 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-      <title>{% block title %}Inicio Ari-J{% endblock %}</title>
+      <title>{% block title %}Crear Tablero Ari-J{% endblock %}</title>
       {% block content %}
       <div class="container-fluid">
         <div class="row mt-5">
             <div class="col-12 my-5">
-                <h2>Lista de Tareas</h2>
-                <div class="list-group" id="tareas">
-                    <div class="list-group-item">
-                        <h5>Hacer Matriz de Riesgos.</h5>
-                    </div>
-                    <div class="list-group-item">
-                        <h5>Hacer Carta Gantt.</h5>
-                    </div>
-                    <div class="list-group-item">
-                        <h5>Hacer Diagramas de despliegue.</h5>
+                <p><h1>CRUD TABLERO</h1></p>
+                <br>
+                <p><h2>Agregar TABLERO</h2>
+                </p>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <table class="table table-bordered table-striped text-center"> 
+                        {{ form.as_table }} 
+                    </table> 
+                    <br>
+                    <input type="submit" value="Guardar">
+                    <input type="reset" value="Limpiar">
+            
+                </form>
                     </div>
                 </div>
             </div>
@@ -30,4 +35,3 @@
       <script src="{% static 'js/options.js' %} "></script>
       {% endblock %}
 </html>
-

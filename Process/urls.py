@@ -31,4 +31,5 @@ urlpatterns = [
     path('login/', pagina_login, name="login"),
     path('logout/', pagina_logout, name="logout"),
     path('barmenu/', barmenu, name="barmenu"),
+    path('crear_tablero/', crear_tablero, name="crear_tablero"),
 ]
