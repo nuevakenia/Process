@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from core.models import Usuario, Tablero
+from core.models import Usuario, Tablero, Unidad , Tablero, Tarea, Tarea_columna, Columna
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import request
@@ -23,13 +23,23 @@ class ExtendedUserCreationForm(UserCreationForm):
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        id_rol = forms.ModelChoiceField(queryset=request.user.groups.all(), required=True)
-        fields = ('nombre', 'apellidop', 'apellidom', 'cargo', 'id_rol' )
+        id_unidad = forms.ModelChoiceField(queryset=Unidad.objects.all(), required=True)
+        fields = ('nombre', 'apellidop', 'apellidom', 'cargo', 'id_unidad')
 
 class TableroForm(forms.ModelForm):
     class Meta:
         model = Tablero
-        widgets = {
-            'ref1': forms.HiddenInput(),
-        }
-        fields = ('nombre','descripcion')
+        fields = ('nombre','descripcion','user')
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.id = self.cleaned_data['user']
+
+        if commit:
+            user.save()
+        return user
+
+class ColumnaForm(forms.ModelForm):
+    class Meta:
+        model = Columna
+        id_tablero = forms.ModelChoiceField(queryset=Tablero.objects.filter(user=3))
+        fields = ('nombre','posicion','descripcion','id_tablero')

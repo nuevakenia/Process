@@ -12,7 +12,6 @@ class Usuario(models.Model):
     apellidom = models.CharField(max_length=99)
     cargo = models.CharField(max_length=50)
     id_unidad = models.ForeignKey('Unidad', on_delete=models.CASCADE)
-
     def __str__(self):
         return self.nombre
 
@@ -20,6 +19,8 @@ class Unidad(models.Model):
     id_unidad = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=255)
+    def __str__(self):
+        return self.nombre
 
 class Tarea(models.Model):
     id_tarea = models.AutoField(primary_key=True)
@@ -47,16 +48,17 @@ class Tablero(models.Model):
     id_tablero = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
-            return self.nombre
+        return self.nombre
 
 class Columna(models.Model):
     id_columna = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
+    posicion = models.IntegerField(blank=False, null=False)
     descripcion = models.CharField(max_length=255)
-    posicion = models.IntegerField
     id_tablero = models.ForeignKey(Tablero, on_delete=models.CASCADE)
-
+    
 class Tarea_columna(models.Model):
     id_tarea_columna = models.AutoField(primary_key=True)
     id_tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)

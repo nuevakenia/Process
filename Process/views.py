@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm
-from core.models import Usuario, Rol, Tablero
+from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm, ColumnaForm
+from core.models import Usuario, Unidad, Tablero
 from django.http import HttpResponse, request
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -10,7 +10,8 @@ from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User 
 from django.contrib import messages
 from django.db import connection
 from django.core.files.base import ContentFile
@@ -28,7 +29,6 @@ def inicio(request):
 def pagina_logout(request):
     logout(request)
     return redirect('login')
-
 
 def pagina_login(request):
     if request.method == 'POST':
@@ -76,27 +76,46 @@ def pagina_registro(request):
         context = {'formularioRegistro' : formularioRegistro, 'usuario_form' : usuario_form}
         return render(request, 'registro.html', context)
 
-
 def tablero(request):
     tableros = Tablero.objects.all()
     data = {'tableros':tableros}
     return render(request, "tablero.html", data)
 
-def crear_tablero(request):
+def crear_columna(request):
     data = {
-        'form':TableroForm()
+        'form':ColumnaForm()
     }
+    
 
+    return render(request, "columna.html", data)
+
+def crear_tarea(request):
+    tableros = Tablero.objects.all()
+    data = {'tableros':tableros}
+    return render(request, "tablero.html", data)
+
+def listar_tareas(request):
+    tableros = Tablero.objects.all()
+    data = {'tableros':tableros}
+    return render(request, "tablero.html", data)
+
+@login_required(login_url="login")
+def crear_tablero(request):
+    context ={}
+    usuario = request.user
+    dict_inicial = {
+        "user" : 3,
+        "nombre" : "Nombre Tablero",
+        "descripcion" : "Descripción tablero"
+        }
     if request.method == 'POST':
-        formulario = TableroForm(request.POST, files=request.FILES)
+        formulario = TableroForm(request.POST or None, initial = dict_inicial)
         if formulario.is_valid():
             formulario.save()
-            data['mensaje'] = "Guardado correctamente"
-        data['form'] = formulario
+            context['mensaje'] = "Guardado correctamente"
+        context['form']= formulario
+    return render(request, "crear_tablero.html", context)   
 
-    return render(request, "crear_tablero.html", data)   
-
-    
 def barmenu(request):
 
-    return render(request, "barmenu.html")    
+    return render(request, "barmenu.html")

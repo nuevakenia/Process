@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from Process.views import (inicio, pagina_logout,pagina_login,pagina_registro,tablero,crear_tablero,barmenu)
+from Process.views import (inicio, pagina_logout,pagina_login
+,pagina_registro,tablero,crear_tablero,barmenu, crear_columna)
 from Process import views
 from django.conf import settings
 from django.templatetags.static import static
@@ -32,4 +33,6 @@ urlpatterns = [
     path('logout/', pagina_logout, name="logout"),
     path('barmenu/', barmenu, name="barmenu"),
     path('crear_tablero/', crear_tablero, name="crear_tablero"),
+    path('tablero/', tablero, name="tablero"),
+    path('crear_columna/', crear_columna, name="crear_columna"),
 ]
