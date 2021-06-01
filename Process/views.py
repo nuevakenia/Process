@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm, ColumnaForm
-from core.models import Usuario, Unidad, Tablero
+from core.models import Usuario, Unidad, Tablero, Columna
 from django.http import HttpResponse, request
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -85,8 +85,7 @@ def crear_columna(request):
     data = {
         'form':ColumnaForm()
     }
-    
-
+    if request.method == 'POST':
     return render(request, "columna.html", data)
 
 def crear_tarea(request):
