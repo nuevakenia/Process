@@ -54,7 +54,6 @@ class TareaForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.id = self.cleaned_data['user']
-
         if commit:
             user.save()
         return user

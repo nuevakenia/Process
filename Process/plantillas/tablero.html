@@ -10,20 +10,34 @@
       {% block content %}
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
       <script src="{% static 'js/confirmacion.js' %} "></script>
-      <div class="container-fluid">
-        <div class="row mt-5 text-center h-100">
-            <div class="col-12 my-5" style="width: 18rem;">
-                <h2>Tablero</h2>
-                
-                <a href="#" onclick="confirmarAgregar({{col.id_columna}})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
+      <div class="container">
+      <h2>Tablero</h2>
+      <a href="#" onclick="confirmarAgregar({{co.id_columna}})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
+        </div>
+      <div class="container">
+          
+        <div class="row">
+               
                 {% for co in columnas %}
-                <div class="list-group" id="tareas">
-                    <div class="list-group-item">
-                   <h5>Tarea prueba</h5>
+                <div class="col-4" id="columnas">
+                    <div class="row align-items-start">
+                    <p><strong>NOMBRE COLUMNA: </strong>{{ co.nombre }}</p>
+                    <div class="list-group" id="tareas">
+                        <div class="list-group-item">
+                            <h5>Tarea prueba</h5>
+                        </div>
+                        <div class="list-group-item">
+                            <h5>Tarea prueba2</h5>
+                        </div>
+                        <div class="list-group" id="tareas">
+                            <div class="list-group-item">
+                                <h5>Tarea examen1</h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+                {% endfor %}  
         </div>
       </div>
       <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>

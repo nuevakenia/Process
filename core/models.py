@@ -73,3 +73,4 @@ class Comentario(models.Model):
     comentario = models.CharField(max_length=255)
     id_tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
     reporte = models.BooleanField()
+    

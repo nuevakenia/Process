@@ -75,8 +75,8 @@ def pagina_registro(request):
         return render(request, 'registro.html', context)
 
 def tablero(request):
-    dataTablero = Tablero.objects.filter(user=1).filter(id_tablero=64)
-    dataColumna = Columna.objects.filter(id_tablero=64)
+    dataTablero = Tablero.objects.filter(user=1).filter(id_tablero=1)
+    dataColumna = Columna.objects.filter(id_tablero=1)
     dataTarea = Tarea.objects.filter(id_tarea=1)
     
     context = {
@@ -103,24 +103,24 @@ def crear_columna(request):
             formulario.save()
             context['mensaje'] = "Guardado correctamente"
         context['form']= formulario
-    return render(request, "columna.html", context)
+    return render(request, "crear_columna.html", context)
 
 def crear_tarea(request):
     tableros = Tablero.objects.all()
     data = {'tableros':tableros}
-    return render(request, "tablero.html", data)
+    return render(request, "xxxxtablero.html", data)
 
 def listar_tareas(request):
     tableros = Tablero.objects.all()
     data = {'tableros':tableros}
-    return render(request, "tablero.html", data)
+    return render(request, "xxtablero.html", data)
 
 @login_required(login_url="login")
 def crear_tablero(request):
     context ={}
     usuario = request.user
     dict_inicial = {
-        "user" : 1,
+         "user" : 1,
         "nombre" : "Nombre Tablero",
         "descripcion" : "Descripción tablero"
         }
