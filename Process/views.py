@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm, ColumnaForm
-from core.models import Usuario, Unidad, Tablero, Columna
+from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna
 from django.http import HttpResponse, request
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -57,12 +57,10 @@ def pagina_registro(request):
                 messages.warning(request, 'Identificación Correcta!')
             if formularioRegistro.is_valid and usuario_form.is_valid():
                 user = formularioRegistro.save()
-
                 usuario = usuario_form.save(commit=False)
                 usuario.user = user
 
                 usuario.save()
-
                 username = formularioRegistro.cleaned_data.get('username')
                 password = formularioRegistro.cleaned_data.get('password1')
                 user = authenticate(username=username, password=password)
@@ -77,16 +75,35 @@ def pagina_registro(request):
         return render(request, 'registro.html', context)
 
 def tablero(request):
-    tableros = Tablero.objects.all()
-    data = {'tableros':tableros}
-    return render(request, "tablero.html", data)
+    dataTablero = Tablero.objects.filter(user=1).filter(id_tablero=64)
+    dataColumna = Columna.objects.filter(id_tablero=64)
+    dataTarea = Tarea.objects.filter(id_tarea=1)
+    
+    context = {
+    'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea
+    }
+    return render(request, "tablero.html", context)
+
+
 
 def crear_columna(request):
-    data = {
+    context = {
         'form':ColumnaForm()
-    }
+    } 
+    usuario = request.user
+    dict_inicial = {
+        "nombre" : "Nombre Columna",
+        "posicion" : "Nombre Columna",
+        "descripcion" : "Descripción Columna",
+        "id_tablero" : 1
+        }
     if request.method == 'POST':
-    return render(request, "columna.html", data)
+        formulario = ColumnaForm(request.POST or None, initial = dict_inicial)
+        if formulario.is_valid():
+            formulario.save()
+            context['mensaje'] = "Guardado correctamente"
+        context['form']= formulario
+    return render(request, "columna.html", context)
 
 def crear_tarea(request):
     tableros = Tablero.objects.all()
@@ -103,7 +120,7 @@ def crear_tablero(request):
     context ={}
     usuario = request.user
     dict_inicial = {
-        "user" : 3,
+        "user" : 1,
         "nombre" : "Nombre Tablero",
         "descripcion" : "Descripción tablero"
         }

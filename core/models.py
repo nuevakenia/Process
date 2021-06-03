@@ -4,6 +4,7 @@ from datetime import date
 from django.contrib.auth.models import User
 import os
 import datetime
+from django.forms.fields import DateTimeField
 
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -26,8 +27,8 @@ class Tarea(models.Model):
     id_tarea = models.AutoField(primary_key=True)
     nombre = models.TextField(max_length=99)
     descripcion = models.CharField(max_length=99)
-    fecha_creacion = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    fecha_termino = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+    fecha_termino = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_tipo = models.ForeignKey('Tarea_tipo', on_delete=models.CASCADE)
     detalle = models.CharField(max_length=255)
@@ -63,8 +64,8 @@ class Tarea_columna(models.Model):
     id_tarea_columna = models.AutoField(primary_key=True)
     id_tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
     id_columna = models.ForeignKey(Columna, on_delete=models.CASCADE)
-    fecha_creacion = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    fecha_termino = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+    fecha_termino = models.DateTimeField(null=True, blank=True) #DateTimeField('%Y-%m-%d %H:%M:%S')
     
 class Comentario(models.Model):
     id_comentario = models.AutoField(primary_key=True)

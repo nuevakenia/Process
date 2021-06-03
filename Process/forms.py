@@ -43,3 +43,18 @@ class ColumnaForm(forms.ModelForm):
         model = Columna
         id_tablero = forms.ModelChoiceField(queryset=Tablero.objects.filter(user=3))
         fields = ('nombre','posicion','descripcion','id_tablero')
+
+class TareaForm(forms.ModelForm):
+    class Meta:
+        model = Tarea
+        fecha_creacion = forms.DateTimeField()
+        fecha_termino = forms.DateTimeField()
+        fields = ('nombre','descripcion','fecha_creacion','fecha_termino'
+        ,'id_tipo','detalle','id_documento','user')
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.id = self.cleaned_data['user']
+
+        if commit:
+            user.save()
+        return user

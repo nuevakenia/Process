@@ -13,20 +13,16 @@
       <div class="container-fluid">
         <div class="row mt-5 text-center h-100">
             <div class="col-12 my-5" style="width: 18rem;">
-                <h2>Lista de Tareas</h2>
+                <h2>Tablero</h2>
                 
-                <a href="#" onclick="confirmarAgregar({{col.id_columna}})"  class="btn btn-primary" role="button" aria-pressed="true">Agregar Columna</a>
+                <a href="#" onclick="confirmarAgregar({{col.id_columna}})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
+                {% for co in columnas %}
                 <div class="list-group" id="tareas">
                     <div class="list-group-item">
-                   <h5>Hacer Matriz de Riesgos.</h5>
-                    </div>
-                    <div class="list-group-item">
-                        <h5>Hacer Carta Gantt.</h5>
-                    </div>
-                    <div class="list-group-item">
-                        <h5>Hacer Diagramas de despliegue.</h5>
+                   <h5>Tarea prueba</h5>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
       </div>
