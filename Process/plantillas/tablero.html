@@ -11,9 +11,40 @@
       <script src="{% static 'js/confirmacion.js' %} "></script>
       <div class="container">
       <h2>Tablero</h2>
-      <a href="#" onclick="confirmarAgregar({{co.id_columna}})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
-      <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-    </div>
+      <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
+      </div>
+      <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Crear Columna
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Nombre Columna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <table class="table table-bordered table-striped text-center"> 
+                            {{ crear_columnas.as_table }} 
+                        </table> 
+                        <br>
+                        <input type="submit" value="Guardar">
+                        <input type="reset" value="Limpiar">
+                    </form>
+                
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Crear</button>
+                </div>
+            </div>
+            </div>
+        </div>
       <div class="container">
           
         <div class="row">
@@ -22,6 +53,8 @@
                 <div class="col-4" id="columnas">
                     <div class="row align-items-start">
                     <p><strong>NOMBRE COLUMNA: </strong>{{ co.nombre }}</p>
+                    <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Crear Columna" data-bs-content="And here's some amazing content. It's very engaging. Right?">Crear Columna</button>
+
                     <div class="list-group" id="tareas">
                         <div class="list-group-item">
                             <h5>Tarea prueba</h5>

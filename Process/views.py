@@ -75,16 +75,27 @@ def pagina_registro(request):
         return render(request, 'registro.html', context)
 
 def tablero(request):
+    usuario = request.user
+    dict_crear_columna = {
+        "nombre" : "Nombre Columna",
+        "posicion" : "Posición Columna",
+        "descripcion" : "Descripción Columna",
+        "id_tablero" : 1
+        }
     dataTablero = Tablero.objects.filter(user=1).filter(id_tablero=1)
     dataColumna = Columna.objects.filter(id_tablero=1)
     dataTarea = Tarea.objects.filter(id_tarea=1)
-    
     context = {
-    'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea
+    'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
-    return render(request, "tablero.html", context)
 
-
+    if request.method == 'POST':
+        formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
+        if formulario.is_valid():
+            formulario.save()
+            context['mensaje'] = "Guardado correctamente"
+            context['crear_columnas']= formulario
+        return render(request, "tablero.html", context)
 
 def crear_columna(request):
     context = {
