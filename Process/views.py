@@ -88,14 +88,16 @@ def tablero(request):
     context = {
     'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
-
     if request.method == 'POST':
         formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
         if formulario.is_valid():
             formulario.save()
             context['mensaje'] = "Guardado correctamente"
             context['crear_columnas']= formulario
-        return render(request, "tablero.html", context)
+    
+    return render(request, "tablero.html", context)
+
+
 
 def crear_columna(request):
     context = {
