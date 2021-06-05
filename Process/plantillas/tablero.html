@@ -11,7 +11,7 @@
       <script src="{% static 'js/confirmacion.js' %} "></script>
       <div class="container">
       <h2>Tablero</h2>
-      <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"  class="btn btn-primary" role="button" aria-pressed="true">Columna +</a>
+      <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"  class="btn btn-primary" role="button" aria-pressed="true">Eliminar Columna</a>
       </div>
       <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -34,8 +34,8 @@
                             {{ crear_columnas.as_table }} 
                         </table> 
                         <br>
-                        <input type="submit" value="Guardar">
-                        <input type="reset" value="Limpiar">
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="reset" class="btn btn-success">Limpiar</button>
                     </form>
                 
                 </div>

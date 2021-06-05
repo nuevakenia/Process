@@ -1,0 +1,31 @@
+### DJANGO ###
+
+Process/settings.py
+
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+### CONDA ###
+
+.env
+
+### PYTHON CACHE ###
+
+__pycache__/
+*.py[cod]
+
+### EXTERNAL DRIVE ###
+
+.Spotlight-V100
+.Trashes
+
+### THUMBAILS ###
+._*
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
