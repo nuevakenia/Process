@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from Process.views import (inicio, pagina_logout,pagina_login
-,pagina_registro,tablero,crear_tablero,barmenu, crear_columna, crear_tarea)
+,pagina_registro,tablero,crear_tablero,barmenu, crear_columna, crear_tarea, tarea_tipo)
 from Process import views
 from django.conf import settings
 from django.templatetags.static import static
@@ -35,5 +35,5 @@ urlpatterns = [
     path('crear_tablero/', crear_tablero, name="crear_tablero"),
     path('tablero/', tablero, name="tablero"),
     path('crear_columna/', crear_columna, name="crear_columna"),
-    path('crear_tarea/', crear_tarea, name="crear_tarea"),
+    path('tarea_tipo/', tarea_tipo, name="tarea_tipo")
 ]

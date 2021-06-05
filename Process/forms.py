@@ -1,6 +1,6 @@
 from django import forms
-from django.forms import ModelForm
-from core.models import Usuario, Tablero, Unidad , Tablero, Tarea, Tarea_columna, Columna
+from django.forms import ModelForm, fields
+from core.models import Documento, Usuario, Tablero, Unidad , Tablero, Tarea, Tarea_columna, Columna, Tarea_tipo
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import request
@@ -57,3 +57,9 @@ class TareaForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class TareaTipoForm(forms.ModelForm):
+    class Meta:
+        model = Tarea_tipo
+        id_documento = forms.ModelChoiceField(queryset=Documento.objects.filter(id_documento=1))
+        fields = ('nombre', 'descripcion', 'id_documento')

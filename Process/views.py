@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm, ColumnaForm
-from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna
+from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm
+from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
 from django.http import HttpResponse, request
-from django.template import Template, Context
+from django.template import Template, Context, RequestContext
 from django.template.loader import get_template
 from django.utils import timezone
 from django.db.models.functions import Concat
@@ -88,16 +88,14 @@ def tablero(request):
     context = {
     'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
+
     if request.method == 'POST':
         formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
         if formulario.is_valid():
             formulario.save()
             context['mensaje'] = "Guardado correctamente"
             context['crear_columnas']= formulario
-    
     return render(request, "tablero.html", context)
-
-
 
 def crear_columna(request):
     context = {
@@ -148,3 +146,23 @@ def crear_tablero(request):
 def barmenu(request):
 
     return render(request, "barmenu.html")
+
+def tarea_tipo(request):
+    context = {
+        'form': TareaTipoForm()
+    } 
+    usuario = request.user
+
+    dict_inicial = {
+        "nombre" : "Nombre Tarea Tipo",
+        "descripcion" : "Descripción Tarea Tipo",
+        "id_documento" : 1
+        }
+
+    if request.method == 'POST':
+        formulario = TareaTipoForm(request.POST or None, initial = dict_inicial)
+        if formulario.is_valid():
+            formulario.save()
+            context['mensaje'] = "Guardado correctamente"
+        context['tarea_tipo']= formulario
+    return render(request, "tarea_tipo.html", context)

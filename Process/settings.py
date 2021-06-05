@@ -55,7 +55,7 @@ ROOT_URLCONF = 'Process.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['C:/Users/galli/Process/Process/plantillas/'],
+        'DIRS': ['C:/Users/stn/Documents/GitHub/Process/Process/plantillas'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

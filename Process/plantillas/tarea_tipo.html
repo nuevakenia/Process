@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+  <html lang="en">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>{% block title %}Crear Tarea Tipo Ari-J{% endblock %}</title>
+      {% block content %}
+      <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-12 my-5">
+                <h1 style="font-size: 42;">Tarea Tipo</h1>
+                <br>
+                </p>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <table class="table table-bordered table-striped text-center"> 
+                        {{ tarea_tipo.as_table }} 
+                    </table> 
+                    <input  type="submit" value="Guardar">
+                    <input type="reset" value="Limpiar">
+                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      {% endblock %}
+</html>
