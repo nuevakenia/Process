@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
-  <html lang="en">
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{% block title %}Registro Ari-J{% endblock %}</title>
-      {% block content %}
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{% block title %}Registro Ari-J{% endblock %}</title>
+{% block content %}
 
-      <div class="container">
-        <div class="row"> 
-            <div class="col">
+<div class="container">
+    <div class="row">
+        <div class="col">
 
-  <form action="" method="post" >
-   
-    {% csrf_token %}
-    
-    <p>{{formularioRegistro.as_p}}</P>
-        {{usuario_form.as_p }}
-    <input type="submit" value="Registrarse" />
+            <form action="" method="post">
 
-</form>
-            </div>
+                {% csrf_token %}
+
+                <p>{{formularioRegistro.as_p}}</P>
+                {{usuario_form.as_p }}
+                <input type="submit" value="Registrarse" />
+
+            </form>
         </div>
     </div>
-  {% endblock %}
+</div>
+{% endblock %}
