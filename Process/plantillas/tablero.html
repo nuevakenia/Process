@@ -1,81 +1,114 @@
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
-  <html lang="en">
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{% block title %}Inicio Ari-J{% endblock %}</title>
-      {% block content %}
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-      <script src="{% static 'js/confirmacion.js' %} "></script>
-      <div class="container">
-      <h2>Tablero</h2>
-      <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"  class="btn btn-primary" role="button" aria-pressed="true">Eliminar Columna</a>
-      </div>
-      <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Crear Columna
-        </button>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Nombre Columna</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <table class="table table-bordered table-striped text-center"> 
-                            {{ crear_columnas.as_table }} 
-                        </table> 
-                        <br>
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                        <button type="reset" class="btn btn-success">Limpiar</button>
-                    </form>
-                
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Crear</button>
-                </div>
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tablero.css' %}">
+<title>{% block title %}Inicio Ari-J{% endblock %}</title>
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="{% static 'js/confirmacion.js' %} "></script>
+<div class="container">
+    <div class="col-12">
+
+        <div class="row">
+            &nbsp
+            <div class="col-12">
+            <div class="dropdown float-end">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Tablero
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for tab in tableros %}
+                    <li><a class="dropdown-item" href="#">{{ tab.nombre }}</a></li>
+                    {% endfor %}
+                </ul>
+              </div>
             </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Crear Columna</button>
+
+                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})" class="btn btn-danger" role="button"
+                    aria-pressed="true">Eliminar Columna</a>
             </div>
         </div>
-      <div class="container">
-          
-        <div class="row">
-               
-                {% for co in columnas %}
-                <div class="col-4" id="columnas">
-                    <div class="row align-items-start">
-                    <p><strong>NOMBRE COLUMNA: </strong>{{ co.nombre }}</p>
-                    <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Crear Columna" data-bs-content="And here's some amazing content. It's very engaging. Right?">Crear Columna</button>
+    </div>
+</div>
+<!-- Button trigger modal -->
 
-                    <div class="list-group" id="tareas">
-                        <div class="list-group-item">
-                            <h5>Tarea prueba</h5>
-                        </div>
-                        <div class="list-group-item">
-                            <h5>Tarea prueba2</h5>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Nombre Columna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <table class="table table-bordered table-striped text-center">
+                        {{ crear_columnas.as_table }}
+                    </table>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Crear Columna</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+    <div class="row">
+
+        {% for co in columnas %}
+        <div class="col-4" id="columna">
+            <div class="row align-items-start">
+                <div class="list-group" id="columnas">
+                    <span class="border">
+                        <div class="col-12" id="titulo">
+                        <p><strong>{{ co.nombre }}</strong></p>
                         </div>
                         <div class="list-group" id="tareas">
                             <div class="list-group-item">
-                                <h5>Tarea examen1</h5>
+                                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"
+                                    class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
+
+                                <h5>Tarea prueba</h5>
+                                
+                                Descripción tarea prueba
+                                
                             </div>
+                            <div class="list-group-item">
+                                <h5>Tarea prueba2</h5>
+                                Descripción tarea prueba3
+                            </div>
+                                <div class="list-group-item">
+                                    <h5>Tarea examen1</h5>
+                                    Descripción tarea prueba!!
+                                </div>
                         </div>
-                    </div>
+                        <div class="float-end" id="boton_tarea">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
+                                data-bs-content="Proximamente">Crear Tarea</button>
+                        </div>
+                    </span>
                 </div>
             </div>
-                {% endfor %}  
         </div>
-      </div>
-      <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-      <script src="{% static 'js/options.js' %} "></script>
-      {% endblock %}
-      
-      </html>
+        {% endfor %}
+    </div>
 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="{% static 'js/options.js' %} "></script>
+{% endblock %}
+
+</html>

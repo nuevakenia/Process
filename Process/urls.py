@@ -22,6 +22,7 @@ from Process.views import (inicio, pagina_logout,pagina_login
 from Process import views
 from django.conf import settings
 from django.templatetags.static import static
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),

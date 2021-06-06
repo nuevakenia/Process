@@ -82,7 +82,7 @@ def tablero(request):
         "descripcion" : "Descripción Columna",
         "id_tablero" : 1
         }
-    dataTablero = Tablero.objects.filter(user=1).filter(id_tablero=1)
+    dataTablero = Tablero.objects.filter(user=1)
     dataColumna = Columna.objects.filter(id_tablero=1)
     dataTarea = Tarea.objects.filter(id_tarea=1)
     context = {

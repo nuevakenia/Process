@@ -1,34 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
-  <html lang="en">
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{% block title %}Crear Tablero Ari-J{% endblock %}</title>
-      {% block content %}
-      <div class="container-fluid">
-        <div class="row mt-5">
-            <div class="col-12 my-5">
-                <p><h1>CRUD TABLERO</h1></p>
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{% block title %}Crear Tablero Ari-J{% endblock %}</title>
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5">
+        <div class="col-12 my-5">
+            <p>
+            <h1>CRUD TABLERO</h1>
+            </p>
+            <br>
+            <p>
+            <h2>Agregar TABLERO</h2>
+            </p>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <table class="table table-bordered table-striped text-center">
+                    {{ form.as_table }}
+                </table>
                 <br>
-                <p><h2>Agregar TABLERO</h2>
-                </p>
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <table class="table table-bordered table-striped text-center"> 
-                        {{ form.as_table }} 
-                    </table> 
-                    <br>
-                    <input type="submit" value="Guardar">
-                    <input type="reset" value="Limpiar">
-            
-                </form>
-                    </div>
-                </div>
-            </div>
+                <input type="submit" value="Guardar">
+                <input type="reset" value="Limpiar">
+
+            </form>
         </div>
-      </div>
-      {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
 </html>
