@@ -21,6 +21,10 @@ import locale
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.aggregates import Sum
+# CACHE
+# from django.views.decorators.cache import cache_page
+
+# cache_page(200)
 
 def inicio(request):
     
@@ -74,6 +78,8 @@ def pagina_registro(request):
         context = {'formularioRegistro' : formularioRegistro, 'usuario_form' : usuario_form}
         return render(request, 'registro.html', context)
 
+
+##
 def tablero(request):
     usuario = request.user
     ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)

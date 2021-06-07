@@ -38,6 +38,14 @@ class TableroForm(forms.ModelForm):
             user.save()
         return user
 
+#rellenar los fields 
+
+class SeleccionarTableroForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields =()
+
+
 class ColumnaForm(forms.ModelForm):
     class Meta:
         model = Columna

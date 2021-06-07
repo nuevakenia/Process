@@ -22,7 +22,12 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     {% for tab in tableros %}
-                    <li><a class="dropdown-item" href="#">{{ tab.nombre }}</a></li>
+                    <form id="SeleccionarTableroForm" action="{{ tab.id_tablero }}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="tablero_seleccionado" value="{{ tab.id_columna }}" />
+                    <li><a class="dropdown-item" type="submit" >{{ tab.nombre }}</a></li>
+                    
+                    </form>
                     {% endfor %}
                 </ul>
               </div>
@@ -58,13 +63,13 @@
                     </table>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Crear Columna</button>
+                <button type="submit" class="btn btn-primary" name='crear_columna'>Crear Columna</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container ">
 
     <div class="row">
 
@@ -72,7 +77,7 @@
         <div class="col-4" id="columna">
             <div class="row align-items-start">
                 <div class="list-group" id="columnas">
-                    <span class="border">
+                    <span class="border border-primary border-3 rounded">
                         <div class="col-12" id="titulo">
                         <p><strong>{{ co.nombre }}</strong></p>
                         </div>

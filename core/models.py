@@ -12,6 +12,7 @@ class Usuario(models.Model):
     apellidop = models.CharField(max_length=99)
     apellidom = models.CharField(max_length=99)
     cargo = models.CharField(max_length=50)
+    ultimo_tablero = models.IntegerField(null=True)
     id_unidad = models.ForeignKey('Unidad', on_delete=models.CASCADE)
     def __str__(self):
         return self.nombre
