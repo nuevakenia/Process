@@ -76,26 +76,36 @@ def pagina_registro(request):
 
 def tablero(request):
     usuario = request.user
+    ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
     dict_crear_columna = {
         "nombre" : "Nombre Columna",
         "posicion" : "Posición Columna",
         "descripcion" : "Descripción Columna",
         "id_tablero" : 1
         }
-    dataTablero = Tablero.objects.filter(user=1)
-    dataColumna = Columna.objects.filter(id_tablero=1)
+    dataTablero = Tablero.objects.filter(user=usuario.id)
+    dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
+    dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0])
     dataTarea = Tarea.objects.filter(id_tarea=1)
     context = {
-    'tableros' : dataTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
+    'tableros' : dataTablero,'ultimotablero' : dataUltTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
-
     if request.method == 'POST':
-        formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
-        if formulario.is_valid():
-            formulario.save()
-            context['mensaje'] = "Guardado correctamente"
-            context['crear_columnas']= formulario
+        if 'crear_columna' in request.POST:
+            formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
+            if formulario.is_valid():
+                formulario.save()
+                context['mensaje'] = "Guardado correctamente"
+                context['crear_columnas']= formulario
+
+        if 'tablero_seleccionado' in request.POST:
+            form_tab_seleccionado = SeleccionarTableroForm(request.POST or None)
+            Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=tab_seleccionado)
+            if form_tab_seleccionado.is_valid():
+                form_tab_seleccionado.save()
+                context['tab_select']= form_tab_seleccionado                
     return render(request, "tablero.html", context)
+
 
 def crear_columna(request):
     context = {
