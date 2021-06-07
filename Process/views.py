@@ -201,3 +201,4 @@ def crear_tarea(request):
         "detalle" : "",
         "id_documento" : 1
     }
+    return render(request, "crear_tarea.html", context)

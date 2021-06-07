@@ -36,5 +36,6 @@ urlpatterns = [
     path('crear_tablero/', crear_tablero, name="crear_tablero"),
     path('tablero/', tablero, name="tablero"),
     path('crear_columna/', crear_columna, name="crear_columna"),
-    path('tarea_tipo/', tarea_tipo, name="tarea_tipo")
+    path('tarea_tipo/', tarea_tipo, name="tarea_tipo"),
+    path('crear_tarea/', crear_tarea, name="crear_tarea"),
 ]
