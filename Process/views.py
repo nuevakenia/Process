@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm
+from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
 from django.http import HttpResponse, request
 from django.template import Template, Context, RequestContext
@@ -131,7 +131,7 @@ def crear_tablero(request):
     context ={}
     usuario = request.user
     dict_inicial = {
-         "user" : 1,
+        "user" : 1,
         "nombre" : "Nombre Tablero",
         "descripcion" : "Descripción tablero"
         }
@@ -166,3 +166,22 @@ def tarea_tipo(request):
             context['mensaje'] = "Guardado correctamente"
         context['tarea_tipo']= formulario
     return render(request, "tarea_tipo.html", context)
+
+
+def crear_tarea(request):
+    context = {
+        'form': TareaForm()
+    }
+
+    usuario = request.user
+
+    dict_inicial = {
+        "nombre" : "Nombre de la tarea",    
+        "descripcion" : "Descripcion de la tarea", 
+        "fecha_creacion" : "Fecha de creacion de la tarea", 
+        "fecha_termino" : "Fecha de termino de la tarea",
+        "user" : 1,
+        "id_tipo" : 1, 
+        "detalle" : "",
+        "id_documento" : 1
+    }
