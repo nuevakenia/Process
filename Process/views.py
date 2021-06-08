@@ -198,7 +198,15 @@ def crear_tarea(request):
         "fecha_termino" : "Fecha de termino de la tarea",
         "user" : 1,
         "id_tipo" : 1, 
-        "detalle" : "",
+        "detalle" : "Deta de la tarea",
         "id_documento" : 1
     }
+
+    if request.method == 'POST':
+        formulario = TareaForm(request.POST or None, initial = dict_inicial)
+        if formulario.is_valid():
+            formulario.save()
+            context['mensaje'] = "Guardado correctamente"
+        context['crear_tarea']= formulario
+
     return render(request, "crear_tarea.html", context)
