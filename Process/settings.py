@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
  
+from dotenv import load_dotenv
+
 from pathlib import Path
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,10 +55,16 @@ MIDDLEWARE = [
  
 ROOT_URLCONF = 'Process.urls'
  
+load_dotenv()
+env_path = Path('.')/'.env'
+load_dotenv(dotenv_path=env_path)
+
+RUTA = os.getenv('RUTA')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['C:/Users/galli/Process/Process/plantillas'],
+        'DIRS': [RUTA],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
