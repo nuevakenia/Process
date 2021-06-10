@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{% block title %}Login Ari-J{% endblock %}</title>
+{% block content %}
+<div class="container">
+    <div class="row"> 
+        <div class="col">
+<h1>{{titulo}}</h1>
+    <br/>
+    {% if messages %}
+
+        {% for mensaje in messages %}
+
+            <div id="mensaje">
+                {{mensaje}}
+            </div>
+
+        {% endfor %}
+    
+    {% endif %}
+
+    <form action="" method="post">
+
+    {% csrf_token %}
+
+    <label for="username">Nombre de Usuario: </label>
+    <input type="text" name="username"/>
+    <label for="password">Contraseña: </label>
+    <input type="password" name="password"/>
+
+    <input type="submit" value=" Acceder " />
+
+    </form>
+    <a href="{% url 'password_reset'  %}">¿Olvidaste tu contraseña?</a>
+    
+</div>
+</div>
+</div>
+
+{% endblock %}

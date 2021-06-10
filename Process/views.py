@@ -87,11 +87,11 @@ def tablero(request):
         "nombre" : "Nombre Columna",
         "posicion" : "Posición Columna",
         "descripcion" : "Descripción Columna",
-        "id_tablero" : 1
+        "id_tablero" : 61
         }
     dataTablero = Tablero.objects.filter(user=usuario.id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
-    dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0])
+    dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
     dataTarea = Tarea.objects.filter(id_tarea=1)
     context = {
     'tableros' : dataTablero,'ultimotablero' : dataUltTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
@@ -112,6 +112,22 @@ def tablero(request):
                 context['tab_select']= form_tab_seleccionado                
     return render(request, "tablero.html", context)
 
+def pagina_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.warning(request, 'Identificación Correcta!')
+            return redirect('inicio')
+
+        else:
+            messages.warning(request, 'Identificación Incorrecta!')
+
+    return render(request, 'login.html',{'titulo':'Identifícate'})
 
 def crear_columna(request):
     context = {

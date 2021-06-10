@@ -49,7 +49,7 @@ class SeleccionarTableroForm(forms.ModelForm):
 class ColumnaForm(forms.ModelForm):
     class Meta:
         model = Columna
-        id_tablero = forms.ModelChoiceField(queryset=Tablero.objects.filter(user=3))
+        id_tablero = forms.ModelChoiceField(queryset=Tablero.objects.filter(user=1))
         fields = ('nombre','posicion','descripcion','id_tablero')
 
 class TareaForm(forms.ModelForm):
