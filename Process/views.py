@@ -7,6 +7,8 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.db.models.functions import Concat
 
+from django.views.generic import ListView
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -92,7 +94,7 @@ def tablero(request):
     dataTablero = Tablero.objects.filter(user=usuario.id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
-    dataTarea = Tarea.objects.filter(id_tarea=1)
+    dataTarea = Tarea.objects.filter(user=1)
     context = {
     'tableros' : dataTablero,'ultimotablero' : dataUltTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
@@ -148,11 +150,6 @@ def crear_columna(request):
         context['form']= formulario
     return render(request, "crear_columna.html", context)
 
-def crear_tarea(request):
-    tableros = Tablero.objects.all()
-    data = {'tableros':tableros}
-    return render(request, "xxxxtablero.html", data)
-
 def listar_tareas(request):
     tableros = Tablero.objects.all()
     data = {'tableros':tableros}
@@ -171,7 +168,7 @@ def crear_tablero(request):
         formulario = TableroForm(request.POST or None, initial = dict_inicial)
         if formulario.is_valid():
             formulario.save()
-            context['mensaje'] = "Guardado correctamente"
+            messages.success(request, 'Tablero submission successful')
         context['form']= formulario
     return render(request, "crear_tablero.html", context)   
 
@@ -195,7 +192,7 @@ def tarea_tipo(request):
         formulario = TareaTipoForm(request.POST or None, initial = dict_inicial)
         if formulario.is_valid():
             formulario.save()
-            context['mensaje'] = "Guardado correctamente"
+            messages.success(request, 'Tarea Tipo submission successful')
         context['tarea_tipo']= formulario
     return render(request, "tarea_tipo.html", context)
 
@@ -204,7 +201,6 @@ def crear_tarea(request):
     context = {
         'form': TareaForm()
     }
-
     usuario = request.user
 
     dict_inicial = {
@@ -222,7 +218,36 @@ def crear_tarea(request):
         formulario = TareaForm(request.POST or None, initial = dict_inicial)
         if formulario.is_valid():
             formulario.save()
-            context['mensaje'] = "Guardado correctamente"
-        context['crear_tarea']= formulario
+            print("Exitoso creacion tarea")
+            messages.success(request, 'Tarea  submission successful')
+            context['crear_tarea']= formulario
 
     return render(request, "crear_tarea.html", context)
+
+    '''
+    class crear_tarea(ListView):
+    context = {
+        'form': TareaForm()
+    }
+
+    dict_inicial = {
+        "nombre" : "Nombre de la tarea",    
+        "descripcion" : "Descripcion de la tarea", 
+        "fecha_creacion" : "Fecha de creacion de la tarea", 
+        "fecha_termino" : "Fecha de termino de la tarea",
+        "user" : 1,
+        "id_tipo" : 1, 
+        "detalle" : "Deta de la tarea",
+        "id_documento" : 1
+    }
+
+    def post(self, request, *args, **kwargs):
+        formulario = TareaForm(request.POST or None, initial = dict_inicial)
+        if formulario.is_valid():
+            formulario.save()
+            print("Exitoso creacion tarea")
+            messages.success(request, 'Tarea  submission successful')
+            context['crear_tarea']= formulario
+    template_name = 'plantillas/crear_tarea.html'
+
+'''

@@ -82,23 +82,19 @@
                         <p><strong>{{ co.nombre }}</strong></p>
                         </div>
                         <div class="list-group" id="tareas">
-                            <div class="list-group-item">
+                            
+                                {% for tar in tareas %}
+                                <div class="list-group-item">
                                 <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"
                                     class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
 
-                                <h5>Tarea prueba</h5>
+                                    <h5>{{ tar.nombre }}</h5>
                                 
-                                Descripción tarea prueba
+                                    {{ tar.descripcion }}
+                                    
                                 
                             </div>
-                            <div class="list-group-item">
-                                <h5>Tarea prueba2</h5>
-                                Descripción tarea prueba3
-                            </div>
-                                <div class="list-group-item">
-                                    <h5>Tarea examen1</h5>
-                                    Descripción tarea prueba!!
-                                </div>
+                            {% endfor %}
                         </div>
                         <div class="float-end" id="boton_tarea">
                             <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
