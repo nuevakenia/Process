@@ -7,21 +7,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>{% block title %}Registro Ari-J{% endblock %}</title>
 {% block content %}
-
+{% load crispy_forms_tags %}
 <div class="container">
-    <div class="row">
-        <div class="col">
-
+    
+    <div class="row justify-content-center">
+        <div class="col-md-3" id="tituloreg">
+            {% if messages %}
+                
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+          </div>
+                {% endfor %}
+    
+    {% endif %}
             <form action="" method="post">
 
                 {% csrf_token %}
 
-                <p>{{formularioRegistro.as_p}}</P>
-                {{usuario_form.as_p }}
-                <input type="submit" value="Registrarse" />
+                {{formularioRegistro | crispy}}
+                {{usuario_form | crispy }}
+                <button type="submit" class="btn btn-success" value="Registrarse">Registrarse</button>
 
             </form>
+
         </div>
     </div>
 </div>
+
 {% endblock %}

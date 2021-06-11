@@ -41,8 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
- 
+ ## Template Crisp
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -121,6 +127,12 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+            'OPTIONS': {
+                'user_attributes': (
+                    'username', 'email', 'first_name', 'last_name'
+                ),
+                'max_similarity': 1
+            }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -137,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
  
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es' #en-us
  
 TIME_ZONE = 'Etc/GMT-3'
  

@@ -9,6 +9,7 @@ from django.db.models.functions import Concat
 
 from django.views.generic import ListView
 
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -60,13 +61,18 @@ def pagina_registro(request):
             password = request.POST["password1"]
             confirmation = request.POST["password2"]
             if password != confirmation:
-                messages.warning(request, 'Identificación Correcta!')
+                messages.warning(request, 'Password Incorrecta!')
+                print("password incorrecta!")
+                return redirect('registro')
+            else:
+                print("Registro exitoso")
             if formularioRegistro.is_valid and usuario_form.is_valid():
+                
                 user = formularioRegistro.save()
                 usuario = usuario_form.save(commit=False)
                 usuario.user = user
-
                 usuario.save()
+                messages.success(request, 'Usuario registrado con éxito')
                 username = formularioRegistro.cleaned_data.get('username')
                 password = formularioRegistro.cleaned_data.get('password1')
                 user = authenticate(username=username, password=password)
@@ -82,15 +88,10 @@ def pagina_registro(request):
 
 
 ##
+@login_required(login_url="login")
 def tablero(request):
     usuario = request.user
     ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
-    dict_crear_columna = {
-        "nombre" : "Nombre Columna",
-        "posicion" : "Posición Columna",
-        "descripcion" : "Descripción Columna",
-        "id_tablero" : 61
-        }
     dataTablero = Tablero.objects.filter(user=usuario.id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
@@ -100,7 +101,7 @@ def tablero(request):
     }
     if request.method == 'POST':
         if 'crear_columna' in request.POST:
-            formulario = ColumnaForm(request.POST or None, initial = dict_crear_columna)
+            formulario = ColumnaForm(request.POST or None)
             if formulario.is_valid():
                 formulario.save()
                 context['mensaje'] = "Guardado correctamente"
