@@ -25,6 +25,7 @@ class Unidad(models.Model):
         return self.nombre
 
 class Tarea(models.Model):
+    estado = models.IntegerField(blank=True, null=True)
     id_tarea = models.AutoField(primary_key=True)
     nombre = models.TextField(max_length=99)
     descripcion = models.CharField(max_length=99)
