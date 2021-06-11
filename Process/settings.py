@@ -127,12 +127,6 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-            'OPTIONS': {
-                'user_attributes': (
-                    'username', 'email', 'first_name', 'last_name'
-                ),
-                'max_similarity': 1
-            }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -144,7 +138,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
- 
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
  
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

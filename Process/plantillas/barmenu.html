@@ -3,23 +3,41 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     </head>
-
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a href="{% url 'inicio' %}"> <img src="{% static 'img/minilogo.png' %}" class="d-inline-block align-top" alt=""  width="64" height="24" href="inicio.html"> </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+    <nav class="navbar navbar-dark navbar-expand-md bg-primary justify-content-center">
+      <div class="container">
+      <a href="{% url 'inicio' %}"> <img src="{% static 'img/minilogo.png' %}" class="navbar-brand d-flex w-50 me-auto" href="inicio.html"> </a>
+      <div class="navbar-collapse collapse w-100" id="collapsingNavbar3">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsingNavbar3">
+        <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav w-100 justify-content-begin">
               <li class="nav-item active">
-                <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio</a>
               </li>
+              <li class="nav-item active">
                 <a class="nav-link " href="{% url 'tablero' %}">Tablero</a>
               </li>
-    </nav>
+            </ul>
+              {% if user.is_authenticated %}
+              <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
+              <li>
+                <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+              </li>
+              
+                
+                <a class="nav-link" href="#" >@{{ user.username }}</a>
+              
+              
+              {% else %}
+              <li>
+                <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+              </li>
+            </ul>
+              {% endif %}
+       
 </div>
-
+</div>
+</nav>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 

@@ -24,10 +24,10 @@
             <form action="" method="post">
 
                 {% csrf_token %}
+                {{ form | crispy }}
                 
-                {{formularioRegistro | crispy}}
-                {{usuario_form | crispy }}
-                <button type="submit" class="btn btn-success" value="Registrarse">Registrarse</button>
+                <a href="{% url 'password_reset'  %}">¿Olvidaste tu contraseña?</a>
+                <button type="submit" class="btn btn-success" value="ingresar">Iniciar Sesión</button>
 
             </form>
         </div>
