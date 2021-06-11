@@ -15,22 +15,34 @@
 
         <div class="row">
             &nbsp
+            
             <div class="col-12">
-            <div class="dropdown float-end">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  Tablero
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    {% for tab in tableros %}
-                    <form id="SeleccionarTableroForm" action="{{ tab.id_tablero }}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="tablero_seleccionado" value="{{ tab.id_columna }}" />
-                    <li><a class="dropdown-item" type="submit" >{{ tab.nombre }}</a></li>
-                    
-                    </form>
-                    {% endfor %}
-                </ul>
-              </div>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                    data-bs-target="#tablero_seleccionado">Seleccionar Tablero</button>
+            <!-- Modal -->
+            <div class="modal fade" id="tablero_seleccionado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="tablero_seleccionado" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tablero_seleccionado">Seleccionar Tablero</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% for tab in tableros %}
+                    <li> {{ tab.id_tablero }}</li>
+                    <li>{{ tab.nombre }}</li>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary" name='tablero_seleccionado'>Seleccionar Tablero</button>   
+                    </div>
+                    <div class="modal-footer">
+                        </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -51,7 +63,7 @@
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Nombre Columna</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Crear Columna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -69,6 +81,7 @@
         </div>
     </div>
 </div>
+
 <div class="container ">
 
     <div class="row">

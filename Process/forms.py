@@ -7,8 +7,8 @@ from django.http import request
 
 
 class ExtendedUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
     class Meta:
+        email = forms.EmailField(required=True)
         model = User
         fields = ('username', 'email', 'password1', 'password2')
     
@@ -40,11 +40,25 @@ class TableroForm(forms.ModelForm):
 
 #rellenar los fields 
 
+class ModificarTableroForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+       # ultimo_tablero = forms.ModelChoiceField(queryset=Usuario.objects.all)
+        fields = '__all__'
+
 class SeleccionarTableroForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields =()
+        #ultimo_tablero = Usuario.ModelChoiceField(queryset=Usuario.objects.filter(ultimo_tablero=user))
+        id_unidad = forms.ModelChoiceField(queryset=Unidad.objects.all(), required=True)
+        fields = ('nombre', 'apellidop', 'apellidom', 'cargo', 'id_unidad', 'ultimo_tablero')
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.id = self.cleaned_data['user']
 
+        if commit:
+            user.save()
+        return user
 
 class ColumnaForm(forms.ModelForm):
     class Meta:
@@ -71,3 +85,8 @@ class TareaTipoForm(forms.ModelForm):
         model = Tarea_tipo
         id_documento = forms.ModelChoiceField(queryset=Documento.objects.filter(id_documento=1))
         fields = ('nombre', 'descripcion', 'id_documento')
+
+class CrearDocumentoForm(forms.ModelForm):
+    class Meta:
+        model = Documento
+        fields = ('nombre', 'descripcion')

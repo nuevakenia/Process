@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm
+from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
 from django.http import HttpResponse, request
 from django.template import Template, Context, RequestContext
@@ -9,6 +9,7 @@ from django.db.models.functions import Concat
 
 from django.views.generic import ListView
 
+from copy import copy
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
@@ -88,6 +89,8 @@ def pagina_registro(request):
 
 
 ##
+
+
 @login_required(login_url="login")
 def tablero(request):
     usuario = request.user
@@ -96,6 +99,7 @@ def tablero(request):
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
     dataTarea = Tarea.objects.filter(user=1)
+       
     context = {
     'tableros' : dataTablero,'ultimotablero' : dataUltTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
@@ -109,10 +113,11 @@ def tablero(request):
 
         if 'tablero_seleccionado' in request.POST:
             form_tab_seleccionado = SeleccionarTableroForm(request.POST or None)
-            Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=tab_seleccionado)
+            Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ultimo_tablero)
             if form_tab_seleccionado.is_valid():
                 form_tab_seleccionado.save()
-                context['tab_select']= form_tab_seleccionado                
+                context['tablero_seleccionado']= form_tab_seleccionado  
+               # print("Exito,Nuevo tablero ID: ",dataUltTablero)              
     return render(request, "tablero.html", context)
 
 def pagina_login(request):
@@ -211,6 +216,7 @@ def crear_tarea(request):
         "fecha_termino" : "Fecha de termino de la tarea",
         "user" : 1,
         "id_tipo" : 1, 
+        "detalle" : "",
         "detalle" : "Deta de la tarea",
         "id_documento" : 1
     }
@@ -219,13 +225,53 @@ def crear_tarea(request):
         formulario = TareaForm(request.POST or None, initial = dict_inicial)
         if formulario.is_valid():
             formulario.save()
-            print("Exitoso creacion tarea")
-            messages.success(request, 'Tarea  submission successful')
-            context['crear_tarea']= formulario
+            messages.success(request, 'Tablero seleccionado con éxito!')
+        context['crear_tarea']= formulario
 
     return render(request, "crear_tarea.html", context)
 
+
+
+def crear_documento(request):
+    context = {
+        'crearDocumento': CrearDocumentoForm()
+    } 
+    if request.method == 'POST':
+        formulario = CrearDocumentoForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Documento creado con éxito!')
+        context['crearDocumento']= formulario
+    return render(request, "crear_documento.html", context)
+
+def modificar_tablero(request, id_tablero):
+    tablero = get_object_or_404(Usuario, user=id_tablero)
+   # ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+   # dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
+    context = {
+        'ult_tablero': ModificarTableroForm(instance=tablero) 
+    }
+    return render(request, "modificar_tablero.html", context)
+
     '''
+    def listado_tablero(request):
+    usuario = request.user
+    tableros = Tablero.objects.filter(user=usuario)
+    data = {
+        'tableros': SeleccionarTableroForm()
+    }
+     if request.method == 'POST':
+        formulario = SeleccionarTableroForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Documento creado con éxito!')
+        context['crearDocumento']= formulario
+    
+
+    contador = Carro.objects.filter(id_carro=usuario.id).count()
+    data = {'tableros':tableros}
+    return render(request, "tableros.html", data)
+
     class crear_tarea(ListView):
     context = {
         'form': TareaForm()
@@ -250,5 +296,55 @@ def crear_tarea(request):
             messages.success(request, 'Tarea  submission successful')
             context['crear_tarea']= formulario
     template_name = 'plantillas/crear_tarea.html'
+
+
+
+
+def listado_tablero(request,id_tablero):
+    usuario = request.user
+    ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+    dataTablero = Tablero.objects.filter(user=usuario.id)
+    dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
+    dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
+    dataTarea = Tarea.objects.filter(user=1)
+    tableros = Tablero.objects.filter(user=usuario)
+    data = {
+        'tableros': dataTablero, 'ultimo_tablero':SeleccionarTableroForm(): 
+    }
+     if request.method == 'POST':
+        formulario = SeleccionarTableroForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Tablero seleccionado con éxito!')
+        context['select_tablero']= formulario
+    return render(request, "tableros.html", context, data)
+
+
+    def crear_tarea(request):
+    context = {
+        'form': TareaForm()
+    }
+    usuario = request.user
+
+    dict_inicial = {
+        "nombre" : "Nombre de la tarea",    
+        "descripcion" : "Descripcion de la tarea", 
+        "fecha_creacion" : "Fecha de creacion de la tarea", 
+        "fecha_termino" : "Fecha de termino de la tarea",
+        "user" : 1,
+        "id_tipo" : 1, 
+        "detalle" : "",
+        "detalle" : "Deta de la tarea",
+        "id_documento" : 1
+    }
+
+    if request.method == 'POST':
+        formulario = TareaForm(request.POST or None, initial = dict_inicial)
+        if formulario.is_valid():
+            formulario.save()
+            context['mensaje'] = "Guardado correctamente"
+        context['crear_tarea']= formulario
+
+    return render(request, "crear_tarea.html", context)
 
 '''

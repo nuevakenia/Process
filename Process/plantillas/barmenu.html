@@ -17,10 +17,28 @@
               <li class="nav-item active">
                 <a class="nav-link " href="{% url 'tablero' %}">Tablero</a>
               </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'crear_tablero' %}">Crear Tablero</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'crear_tarea' %}">Crear Tarea</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'tarea_tipo' %}">Crear Tarea Tipo</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'crear_documento' %}">Crear Documento</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'registro' %}">Registrarse</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
+              </li>
             </ul>
               {% if user.is_authenticated %}
               <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
-              <li>
+                <li class="nav-item active">
                 <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
               </li>
               
@@ -29,8 +47,8 @@
               
               
               {% else %}
-              <li>
-                <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
               </li>
             </ul>
               {% endif %}
