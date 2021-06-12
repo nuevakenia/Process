@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm
+from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
 from django.http import HttpResponse, request
 from django.template import Template, Context, RequestContext
@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.db.models.functions import Concat
 
 from django.views.generic import ListView
-
+from django.views.generic import View
 from copy import copy
 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -92,17 +92,26 @@ def pagina_registro(request):
 
 
 @login_required(login_url="login")
-def tablero(request):
+def tablero(request,id):
     usuario = request.user
     ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
     dataTablero = Tablero.objects.filter(user=usuario.id)
+    dataTableroEscogido = get_object_or_404(Tablero, id_tablero=id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
-    dataColumna = Columna.objects.filter(id_tablero=ult_tablero[0:1].get())
+    dataColumna = Columna.objects.filter(id_tablero=id)
     dataTarea = Tarea.objects.filter(user=1)
        
     context = {
-    'tableros' : dataTablero,'ultimotablero' : dataUltTablero,'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
+    'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
+    if request.method == 'GET':
+        if 'crear_columna' in request.POST:
+            formulario = ColumnaForm(request.POST or None)
+            if formulario.is_valid():
+                formulario.save()
+                context['mensaje'] = "Guardado correctamente"
+                context['crear_columnas']= formulario
+                
     if request.method == 'POST':
         if 'crear_columna' in request.POST:
             formulario = ColumnaForm(request.POST or None)
@@ -112,11 +121,12 @@ def tablero(request):
                 context['crear_columnas']= formulario
 
         if 'tablero_seleccionado' in request.POST:
-            form_tab_seleccionado = SeleccionarTableroForm(request.POST or None)
-            Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ultimo_tablero)
+            form_tab_seleccionado = SeleccionarTableroForm(request.POST, instance=dataTableroEscogido)
+            #Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ultimo_tablero)
             if form_tab_seleccionado.is_valid():
                 form_tab_seleccionado.save()
-                context['tablero_seleccionado']= form_tab_seleccionado  
+                return redirect('tablero/',id)
+            context['formSelcTab']= form_tab_seleccionado  
                # print("Exito,Nuevo tablero ID: ",dataUltTablero)              
     return render(request, "tablero.html", context)
 
@@ -244,7 +254,60 @@ def crear_documento(request):
         context['crearDocumento']= formulario
     return render(request, "crear_documento.html", context)
 
-def modificar_tablero(request, id_tablero):
+
+
+class ModificarTablero(View):
+
+    def get(self, request, *args, **kwargs):
+        usuario = request.user
+        form = ModificarTableroForm(usuario)
+        
+
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        update_tablero = Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ult_tablero)
+        tableros = Tablero.objects.filter(id_tablero=ult_tablero[0:1].get())
+        return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
+
+    '''
+class ModificarTablero(View):
+
+    def get(self, request, *args, **kwargs):
+        usuario = request.user
+        form = ModificarTableroForm(usuario)
+        
+        
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        update_tablero = Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ult_tablero)
+        tableros = Tablero.objects.filter(id_tablero=ult_tablero[0:1].get())
+        return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
+    
+    def post(self, request, *args, **kwargs):
+        usuario = request.user
+        form = ModificarTableroForm(usuario)
+        
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        update_tablero = Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ult_tablero)
+        tableros = Tablero.objects.filter(id_tablero=ult_tablero[0:1].get())
+
+        if form.is_valid():
+            print("todo okei")
+            newform = form.save(commit=False)
+            newform.user = request.user
+            newform.save()
+        return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
+
+    def post(self, request, *args, **kwargs):
+        usuario = request.user
+        context = {} 
+        form = ModificarTableroForm(request.POST, instance=usuario)
+        if form.is_valid():
+            newform = form.save(commit=False)
+            newform.user = request.user
+            newform.save()
+        context['crearDocumento']= form
+        return render(request, "modificar_tablero.html", context)  
+    
+    def modificar_tablero(request, id_tablero):
     tablero = get_object_or_404(Usuario, user=id_tablero)
    # ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
    # dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
@@ -253,7 +316,7 @@ def modificar_tablero(request, id_tablero):
     }
     return render(request, "modificar_tablero.html", context)
 
-    '''
+
     def listado_tablero(request):
     usuario = request.user
     tableros = Tablero.objects.filter(user=usuario)

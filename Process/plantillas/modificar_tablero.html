@@ -17,11 +17,14 @@
                     {% csrf_token %}
                     
                     <table class="table table-bordered table-striped text-center"> 
-                        {{ ult_tablero.as_table }} 
+                        {{ form.as_table }} 
                     </table> 
                     <input  type="submit" value="Guardar">
                     <input type="reset" value="Limpiar">
                 </form>
+                {% for t in tableros %}
+                <h5>{{ t.nombre }}</h5>
+                {% endfor %}
                     </div>
                 </div>
             </div>

@@ -32,12 +32,12 @@
                         {% for tab in tableros %}
                     <li> {{ tab.id_tablero }}</li>
                     <li>{{ tab.nombre }}</li>
-                        <form action="" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary" name='tablero_seleccionado'>Seleccionar Tablero</button>   
-                    </div>
+                            <a href="{% url 'tablero' tab.id_tablero %}">
+                            <button class="btn btn-primary" type="button">Seleccionar Tablero</button></a>
+                        
+                        </div>
                     <div class="modal-footer">
-                        </form>
+                        
                         {% endfor %}
                     </div>
                 </div>
