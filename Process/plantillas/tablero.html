@@ -10,12 +10,14 @@
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{% static 'js/confirmacion.js' %} "></script>
+
 <div class="container">
+    
     <div class="col-12">
 
             <div class="row">
-            <div class="col-12">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+            <div class="col-12" id="titulotab">
+                <button type="button" class="btn btn-secondary float-end" data-bs-toggle="modal"
                 data-bs-target="#modalTable">Seleccionar Tablero</button>
 
  <!-- Modal -->
@@ -23,7 +25,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal table</h5>
+        <h5 class="modal-title">Seleccionar Tablero </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
@@ -60,12 +62,13 @@
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop">Crear Columna</button>
-                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})" class="btn btn-danger" role="button"
+                <a href="#" onclick="confirmarEliminarCol({{ co.id_columna }})" class="btn btn-danger" role="button"
                     aria-pressed="true">Eliminar Columna</a>
             </div>
         </div>
     </div>
 </div>
+
 </div>
 <!-- Button trigger modal -->
 
@@ -94,16 +97,16 @@
         </div>
     </div>
 </div>
-
-<div class="container ">
-
-    <div class="row">
-
+<span class="border border-secondary border-3 rounded">
+<div class="container fluid" id="footer">
+    
+    <div class="row flex-row flex-nowrap">
+        
         {% for co in columnas %}
         <div class="col-4" id="columna">
             <div class="row align-items-start">
                 <div class="list-group" id="columnas">
-                    <span class="border border-primary border-3 rounded">
+                    <span class="border border-primary border-3 ">
                         <div class="col-12" id="titulo">
                         <p><strong>{{ co.nombre }}</strong></p>
                         </div>
@@ -111,7 +114,7 @@
                             
                                 {% for tar in tareas %}
                                 <div class="list-group-item">
-                                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})"
+                                <a href="#" onclick="confirmarModificarTar({{ co.id_columna }})"
                                     class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
 
                                     <h5>{{ tar.nombre }}</h5>
@@ -132,14 +135,17 @@
                                     }
                                   </script>
                         </div>
-                    </span>
+                    
                 </div>
             </div>
+        </span>
         </div>
         {% endfor %}
+    
     </div>
-
+    
 </div>
+</span>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script src="{% static 'js/options.js' %} "></script>
 {% endblock %}
