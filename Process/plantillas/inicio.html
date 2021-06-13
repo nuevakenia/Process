@@ -8,7 +8,22 @@
 <title>{% block title %}Inicio Ari-J{% endblock %}</title>
 {% block content %}
 <div class="container-fluid">
-
+    {% if user.is_authenticated %}
+              <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
+                <li class="nav-item active">
+                <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+              </li>
+              
+                
+                <a class="nav-link" href="#" >@{{ user.username }}</a>
+              
+              
+              {% else %}
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
+              </li>
+            </ul>
+              {% endif %}
 </div>
 {% endblock %}
 

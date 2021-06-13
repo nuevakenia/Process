@@ -30,8 +30,26 @@ from django.db.models.aggregates import Sum
 
 # cache_page(200)
 
-def inicio(request):
+# error 404
+def custom_page_not_found(request):
     
+    return render(request,'custom_page_not_found.html')
+
+# error 500
+def custom_server_error(request):
+    usuario = request.user
+    if request.method == 'GET' and usuario.is_authenticated:
+        dataTablero = Tablero.objects.filter(user=usuario.id)
+        context = { 'tableros' : dataTablero }
+    return render(request,'custom_server_error.html', context)
+
+@login_required(login_url="login")
+def inicio(request):
+    usuario = request.user
+    if request.method == 'GET' and usuario.is_authenticated:
+        usr = get_object_or_404(Usuario, user=usuario.id)
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        return redirect('tablero', id=usr.ultimo_tablero)
     return render(request, "inicio.html")
 
 def pagina_logout(request):
@@ -100,7 +118,7 @@ def tablero(request,id):
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=id)
     dataTarea = Tarea.objects.filter(user=1)
-       
+    Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)  
     context = {
     'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
     }
@@ -175,16 +193,17 @@ def listar_tareas(request):
 def crear_tablero(request):
     context ={}
     usuario = request.user
-    dict_inicial = {
-        "user" : 1,
-        "nombre" : "Nombre Tablero",
-        "descripcion" : "Descripción tablero"
-        }
     if request.method == 'POST':
-        formulario = TableroForm(request.POST or None, initial = dict_inicial)
+        formulario = TableroForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero submission successful')
+            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
+            print("Ultimo tablero: ", ult_tablero)
+            usr = get_object_or_404(Tablero, id_tablero=usuario.id)
+            messages.success(request, 'Tablero creado correctamente')
+          #  nuevo_tablero = formulario.cleaned_data.get('nombre')
+           # print("id tablero creado ",nuevo_tablero)
+            return redirect('tablero', id=ult_tablero)
         context['form']= formulario
     return render(request, "crear_tablero.html", context)   
 

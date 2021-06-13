@@ -13,46 +13,59 @@
 <div class="container">
     <div class="col-12">
 
-        <div class="row">
-            &nbsp
-            
+            <div class="row">
             <div class="col-12">
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                    data-bs-target="#tablero_seleccionado">Seleccionar Tablero</button>
-            <!-- Modal -->
-            <div class="modal fade" id="tablero_seleccionado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="tablero_seleccionado" aria-hidden="true">
-            <div class="modal-dialog ">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="tablero_seleccionado">Seleccionar Tablero</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {% for tab in tableros %}
-                    <li> {{ tab.id_tablero }}</li>
-                    <li>{{ tab.nombre }}</li>
-                            <a href="{% url 'tablero' tab.id_tablero %}">
-                            <button class="btn btn-primary" type="button">Seleccionar Tablero</button></a>
-                        
-                        </div>
-                    <div class="modal-footer">
-                        
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            </div>
-            </div>
+                data-bs-target="#modalTable">Seleccionar Tablero</button>
+
+ <!-- Modal -->
+<div id="modalTable" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalTable" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal table</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped text-center">
+                            <p><h2>Tableros</h2>
+                            </p> 
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tab in tableros %}
+                            <tr>
+                                <td>{{ tab.nombre }}</td>
+                                <td>{{ tab.descripcion }}</td>
+                                <td><a href="{% url 'tablero' tab.id_tablero %}">
+                                <button class="btn btn-primary" type="button">Seleccionar</button></a></td>
+                                
+                            </tr>{% endfor %}
+                            </tbody>
+                        </table>  
+      </div>
+      <div class="modal-footer">
+        <button id='closeModal' type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  End Modal -->
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop">Crear Columna</button>
-
                 <a href="#" onclick="confirmarAgregar({{ co.id_columna }})" class="btn btn-danger" role="button"
                     aria-pressed="true">Eliminar Columna</a>
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- Button trigger modal -->
 
@@ -112,6 +125,12 @@
                         <div class="float-end" id="boton_tarea">
                             <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
                                 data-bs-content="Proximamente">Crear Tarea</button>
+                                <script>
+                                    var list = document.getElementsByClassName("list-group");
+                                    for (var i = 0; i < list.length; i++) {
+                                     list[i].setAttribute("id", "columnas" + i);
+                                    }
+                                  </script>
                         </div>
                     </span>
                 </div>
