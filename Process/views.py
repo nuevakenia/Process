@@ -1,28 +1,21 @@
 from django.shortcuts import redirect, render
-<<<<<<< HEAD
-from .forms import ExtendedUserCreationForm, UsuarioForm, TableroForm
-from core.models import Usuario, Rol, Tablero
-=======
 from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
->>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 from django.http import HttpResponse, request
-from django.template import Template, Context
+from django.template import Template, Context, RequestContext
 from django.template.loader import get_template
 from django.utils import timezone
 from django.db.models.functions import Concat
 
-<<<<<<< HEAD
-=======
 from django.views.generic import ListView
 from django.views.generic import View
 from copy import copy
 
->>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User 
 from django.contrib import messages
 from django.db import connection
 from django.core.files.base import ContentFile
@@ -32,6 +25,10 @@ import locale
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.aggregates import Sum
+# CACHE
+# from django.views.decorators.cache import cache_page
+
+# cache_page(200)
 
 # error 404
 def custom_page_not_found(request):
@@ -61,7 +58,6 @@ def pagina_logout(request):
     logout(request)
     return redirect('login')
 
-
 def pagina_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -86,15 +82,18 @@ def pagina_registro(request):
             password = request.POST["password1"]
             confirmation = request.POST["password2"]
             if password != confirmation:
-                messages.warning(request, 'Identificación Correcta!')
+                messages.warning(request, 'Password Incorrecta!')
+                print("password incorrecta!")
+                return redirect('registro')
+            else:
+                print("Registro exitoso")
             if formularioRegistro.is_valid and usuario_form.is_valid():
+                
                 user = formularioRegistro.save()
-
                 usuario = usuario_form.save(commit=False)
                 usuario.user = user
-
                 usuario.save()
-
+                messages.success(request, 'Usuario registrado con éxito')
                 username = formularioRegistro.cleaned_data.get('username')
                 password = formularioRegistro.cleaned_data.get('password1')
                 user = authenticate(username=username, password=password)
@@ -109,9 +108,6 @@ def pagina_registro(request):
         return render(request, 'registro.html', context)
 
 
-<<<<<<< HEAD
-def tablero(request):
-=======
 ##
 
 @login_required(login_url="login")
@@ -194,29 +190,12 @@ def crear_columna(request):
     return render(request, "crear_columna.html", context)
 
 def listar_tareas(request):
->>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
     tableros = Tablero.objects.all()
     data = {'tableros':tableros}
-    return render(request, "tablero.html", data)
+    return render(request, "xxtablero.html", data)
 
+@login_required(login_url="login")
 def crear_tablero(request):
-<<<<<<< HEAD
-    data = {
-        'form':TableroForm()
-    }
-
-    if request.method == 'POST':
-        formulario = TableroForm(request.POST, files=request.FILES)
-        if formulario.is_valid():
-            formulario.save()
-            data['mensaje'] = "Guardado correctamente"
-        data['form'] = formulario
-
-    return render(request, "crear_tablero.html", data)   
-
-    
-def barmenu(request):
-=======
     context ={}
     usuario = request.user
     if request.method == 'POST':
@@ -441,6 +420,5 @@ def listado_tablero(request,id_tablero):
         context['crear_tarea']= formulario
 
     return render(request, "crear_tarea.html", context)
->>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 
-    return render(request, "barmenu.html")    
+'''
