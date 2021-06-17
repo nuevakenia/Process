@@ -1,9 +1,8 @@
 from django import forms
-from django.forms import ModelForm, fields
-from core.models import Documento, Usuario, Tablero, Unidad , Tablero, Tarea, Tarea_columna, Columna, Tarea_tipo
+from django.forms import ModelForm
+from core.models import Usuario, Tablero
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
-from django.http import request
 
 
 class ExtendedUserCreationForm(UserCreationForm):
@@ -23,12 +22,14 @@ class ExtendedUserCreationForm(UserCreationForm):
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        id_unidad = forms.ModelChoiceField(queryset=Unidad.objects.all(), required=True)
-        fields = ('nombre', 'apellidop', 'apellidom', 'cargo', 'id_unidad')
+        fields = ('nombre', 'apellidop', 'apellidom', 'cargo', 'id_rol' )
 
 class TableroForm(forms.ModelForm):
     class Meta:
         model = Tablero
+<<<<<<< HEAD
+        fields = ('id_tablero','nombre','descripcion')
+=======
         fields = ('nombre','descripcion','user')
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -122,3 +123,4 @@ class CrearDocumentoForm(forms.ModelForm):
     class Meta:
         model = Documento
         fields = ('nombre', 'descripcion')
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c

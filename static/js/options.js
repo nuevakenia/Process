@@ -1,15 +1,3 @@
-    const tareas = document.getElementById('tareas');
-    const columnas = document.getElementById('columnas');
+const tareas = document.getElementById('tareas');
 
-    new Sortable(tareas, {
-        group: 'shared', 
-        animation: 150,
-        ghostClass: 'blue-background-class'
-    });
-
-    new Sortable(columnas, {
-        group: 'shared', 
-        animation: 150,
-        ghostClass: 'blue-background-class'
-    });
-
+Sortable.create(tareas);
