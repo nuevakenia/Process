@@ -118,7 +118,8 @@ def tablero(request,id):
     dataTableroEscogido = get_object_or_404(Tablero, id_tablero=id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=id)
-    dataTarea = Tarea.objects.filter(user=usuario.id)
+    dataTarea = Tarea.objects.filter(user=usuario.id).values('id_tarea','nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
+    ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion')
     Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)
     dataTareaColumna = Tarea.objects.filter(user=usuario.id).filter(id_columna=21)
     colum = Columna.objects.filter(id_columna=id)  

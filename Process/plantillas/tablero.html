@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load get_val %}
 <!doctype html>
 <html lang="en">
 <!-- Required meta tags -->
@@ -109,16 +110,14 @@
                     <span class="border border-primary border-3 ">
                         <div class="col-12" id="titulo">
                         <p><strong>{{ co.nombre }}</strong></p>
-                        {{ co.id_columna }}
+                        <p><strong>{{ co.id_columna }}</strong></p>
                         </div>
+                        {% for tar in tareas %}
                         <div class="list-group" id="tareas">
-                            
-                                {% for tar in tareas %}
-                                nombre: {{ tar.nombre }}
-                                {{ tar.id_columna }}
-                                Id: {{ tar.id_columna }}
+
                                 {% if tar.id_columna == co.id_columna %}
                                 <div class="list-group-item">
+                                    
                                 <a href="#" onclick="confirmarModificarTar({{ co.id_columna }})"
                                     class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
 
@@ -127,8 +126,10 @@
                                     descripcion: {{ tar.descripcion }}
                                   
                                     {% endif %}
-                            </div>
-                            {% endfor %}
+                                </div>
+                                    {% endfor %}   
+                          
+                           
                         </div>
                         <div class="float-end" id="boton_tarea">
                             <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"

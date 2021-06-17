@@ -9,9 +9,9 @@ from django.forms.fields import DateTimeField
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=99)
-    apellidop = models.CharField(max_length=99)
-    apellidom = models.CharField(max_length=99)
-    cargo = models.CharField(max_length=50)
+    apellidop = models.CharField(max_length=99,null=True)
+    apellidom = models.CharField(max_length=99,null=True)
+    cargo = models.CharField(max_length=50,null=True)
     ultimo_tablero = models.IntegerField(null=True)
     id_unidad = models.ForeignKey('Unidad', on_delete=models.CASCADE)
     def __str__(self):
