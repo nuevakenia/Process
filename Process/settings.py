@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+<<<<<<< HEAD
+=======
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +30,15 @@ SECRET_KEY = 'django-insecure-)h%e!%l-y9+j%v14!j@-3gh@(-!7579(4hz8l6e%147w9_j@mz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = []
 
 
+=======
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ 
+ 
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 # Application definition
 
 INSTALLED_APPS = [
@@ -124,7 +135,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+<<<<<<< HEAD
 
+=======
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+ 
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 

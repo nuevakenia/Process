@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
+<<<<<<< HEAD
   <html lang="en">
       <!-- Required meta tags -->
       <meta charset="utf-8">
@@ -12,5 +13,33 @@
         
       </div>
       {% endblock %}
+=======
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{% block title %}Inicio Ari-J{% endblock %}</title>
+{% block content %}
+<div class="container-fluid">
+    {% if user.is_authenticated %}
+              <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
+                <li class="nav-item active">
+                <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+              </li>
+              
+                
+                <a class="nav-link" href="#" >@{{ user.username }}</a>
+              
+              
+              {% else %}
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
+              </li>
+            </ul>
+              {% endif %}
+</div>
+{% endblock %}
+
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 </html>
 

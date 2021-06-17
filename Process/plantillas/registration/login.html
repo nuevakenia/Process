@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
@@ -26,10 +24,12 @@
             <form action="" method="post">
 
                 {% csrf_token %}
+                {{ form | crispy }}
                 
-                {{formularioRegistro | crispy}}
-                {{usuario_form | crispy }}
-                <button type="submit" class="btn btn-success" value="Registrarse">Registrarse</button>
+                <a href="{% url 'password_reset'  %}">¿Olvidaste tu contraseña?</a>
+                <button type="submit" class="btn btn-success" value="ingresar">Iniciar Sesión</button>
+                <a href="{% url 'registro'%}">
+                <button class="btn btn-primary" type="button">Registrarse</button></a>
 
             </form>
         </div>
@@ -37,4 +37,3 @@
 </div>
 
 {% endblock %}
->>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c

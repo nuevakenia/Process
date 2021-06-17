@@ -2,6 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 <!doctype html>
+<<<<<<< HEAD
   <html lang="en">
       <!-- Required meta tags -->
       <meta charset="utf-8">
@@ -23,12 +24,167 @@
                     <div class="list-group-item">
                         <h5>Hacer Diagramas de despliegue.</h5>
                     </div>
-                </div>
+=======
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tablero.css' %}">
+<title>{% block title %}Inicio Ari-J{% endblock %}</title>
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="{% static 'js/confirmacion.js' %} "></script>
+
+<div class="container">
+    
+    <div class="col-12">
+
+            <div class="row">
+            <div class="col-12" id="titulotab">
+                <button type="button" class="btn btn-secondary float-end" data-bs-toggle="modal"
+                data-bs-target="#modalTable">Seleccionar Tablero</button>
+
+ <!-- Modal -->
+<div id="modalTable" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalTable" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seleccionar Tablero </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped text-center">
+                            <p><h2>Tableros</h2>
+                            </p> 
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tab in tableros %}
+                            <tr>
+                                <td>{{ tab.nombre }}</td>
+                                <td>{{ tab.descripcion }}</td>
+                                <td><a href="{% url 'tablero' tab.id_tablero %}">
+                                <button class="btn btn-primary" type="button">Seleccionar</button></a></td>
+                                
+                            </tr>{% endfor %}
+                            </tbody>
+                        </table>  
+      </div>
+      <div class="modal-footer">
+        <button id='closeModal' type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  End Modal -->
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Crear Columna</button>
+                <a href="#" onclick="confirmarEliminarCol({{ co.id_columna }})" class="btn btn-danger" role="button"
+                    aria-pressed="true">Eliminar Columna</a>
             </div>
         </div>
+    </div>
+</div>
+
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Crear Columna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <table class="table table-bordered table-striped text-center">
+                        {{ crear_columnas.as_table }}
+                    </table>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" name='crear_columna'>Crear Columna</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="border border-secondary border-3 rounded">
+<div class="container fluid" id="footer">
+    
+    <div class="row flex-row flex-nowrap">
+        
+        {% for co in columnas %}
+        <div class="col-4" id="columna">
+            <div class="row align-items-start">
+                <div class="list-group" id="columnas">
+                    <span class="border border-primary border-3 ">
+                        <div class="col-12" id="titulo">
+                        <p><strong>{{ co.nombre }}</strong></p>
+                        {{ co.id_columna }}
+                        </div>
+                        <div class="list-group" id="tareas">
+                            
+                                {% for tar in tareas %}
+                                nombre: {{ tar.nombre }}
+                                {{ tar.id_columna }}
+                                Id: {{ tar.id_columna }}
+                                {% if tar.id_columna == co.id_columna %}
+                                <div class="list-group-item">
+                                <a href="#" onclick="confirmarModificarTar({{ co.id_columna }})"
+                                    class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
+
+                                     <h5>nombre: {{ tar.nombre }}</h5>
+                                
+                                    descripcion: {{ tar.descripcion }}
+                                  
+                                    {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="float-end" id="boton_tarea">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
+                                data-bs-content="Proximamente">Crear Tarea</button>
+                                <script>
+                                    var list = document.getElementsByClassName("list-group");
+                                    for (var i = 0; i < list.length; i++) {
+                                     list[i].setAttribute("id", "columnas" + i);
+                                    }
+                                  </script>
+                        </div>
+                    
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
+                </div>
+            </div>
+        </span>
+        </div>
+<<<<<<< HEAD
       </div>
       <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
       <script src="{% static 'js/options.js' %} "></script>
       {% endblock %}
 </html>
+=======
+        {% endfor %}
+    
+    </div>
+    
+</div>
+</span>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="{% static 'js/options.js' %} "></script>
+{% endblock %}
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
 

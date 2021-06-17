@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+  <html lang="en">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>{% block title %}Seleccionar Tablero Ari-J{% endblock %}</title>
+      {% block content %}
+      <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-12 my-5">
+                <h1 style="font-size: 42;">Seleccionar Tablero</h1>
+                <br>
+
+                
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <table class="table table-bordered table-striped text-center"> 
+                        {{ form.as_table }} 
+                    </table> 
+                    <input  type="submit" value="Guardar">
+                    <input type="reset" value="Limpiar">
+                </form>
+                {% for t in tableros %}
+                <h5>{{ t.nombre }}</h5>
+                {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      {% endblock %}
+</html>

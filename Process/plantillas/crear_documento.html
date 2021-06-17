@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+  <html lang="en">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>{% block title %}Crear Documento Ari-J{% endblock %}</title>
+      {% block content %}
+      <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-12 my-5">
+                <h1 style="font-size: 42;">Crear Documento</h1>
+                <br>
+                {% if messages %}
+                <ul class="messages">
+        {% for message in messages %}
+        
+        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+                </p>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <table class="table table-bordered table-striped text-center"> 
+                        {{ crearDocumento.as_table }} 
+                    </table> 
+                    <input  type="submit" value="Guardar">
+                    <input type="reset" value="Limpiar">
+                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      {% endblock %}
+</html>
+
+
+                {% for tab in tableros %}
+                    <form id="SeleccionarTableroForm" action="{{ tab.id_tablero }}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="tablero_seleccionado" value="{{ tab.id_columna }}" />
+                    <li><a class="dropdown-item" type="submit" >{{ tab.nombre }}</a></li>
+                    
+                    </form>
+                    {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Crear Columna</button>
+
+                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})" class="btn btn-danger" role="button"
+                    aria-pressed="true">Eliminar Columna</a>

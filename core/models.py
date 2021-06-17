@@ -22,15 +22,24 @@ class Rol(models.Model):
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE)
 
 class Tarea(models.Model):
+<<<<<<< HEAD
     id_tarea = models.IntegerField(primary_key=True)
     nombre = models.TextField(max_length=99)
+=======
+    id_tarea = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=99)
+>>>>>>> fbdfabec2ca1144421b869ca89ab4a47dbccaa7c
     descripcion = models.CharField(max_length=99)
     fecha_creacion = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     fecha_termino = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_columna = models.ForeignKey('Columna', on_delete=models.CASCADE)
     id_tipo = models.ForeignKey('Tarea_tipo', on_delete=models.CASCADE)
     detalle = models.CharField(max_length=255)
     id_documento = models.ForeignKey('Documento', on_delete=models.CASCADE)
+    estado = models.IntegerField(blank=True, null=True)
+    estado_avance = models.IntegerField(blank=True, null=True)
+    posicion = models.IntegerField(blank=False, null=False)
 
 
 class Tarea_tipo(models.Model):

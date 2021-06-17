@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{% block title %}Inicio Ari-J{% endblock %}</title>
+{% block content %}
+<div class="container-fluid">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mx-auto align-items-center" style="width: 18rem;" >
+        <table class="table table-bordered table-striped text-center">
+
+    <p><h2>Tableros</h2>
+    </p> 
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Seleccionar</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for tab in tableros %}
+    <tr>
+        <td>{{ tab.nombre }}</td>
+        <td>{{ tab.descripcion }}</td>
+        <td><a href="{% url 'tablero' tab.id_tablero %}">
+            <button class="btn btn-primary" type="button">Seleccionar</button></a></td>
+    </tr>
+    </tbody>
+</table>  
+</div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+</html>
