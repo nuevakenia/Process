@@ -109,19 +109,24 @@
                     <span class="border border-primary border-3 ">
                         <div class="col-12" id="titulo">
                         <p><strong>{{ co.nombre }}</strong></p>
+                        {{ co.id_columna }}
                         </div>
                         <div class="list-group" id="tareas">
                             
                                 {% for tar in tareas %}
+                                nombre: {{ tar.nombre }}
+                                {{ tar.id_columna }}
+                                Id: {{ tar.id_columna }}
+                                {% if tar.id_columna == co.id_columna %}
                                 <div class="list-group-item">
                                 <a href="#" onclick="confirmarModificarTar({{ co.id_columna }})"
                                     class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
 
-                                    <h5>{{ tar.nombre }}</h5>
+                                     <h5>nombre: {{ tar.nombre }}</h5>
                                 
-                                    {{ tar.descripcion }}
-                                    
-                                
+                                    descripcion: {{ tar.descripcion }}
+                                  
+                                    {% endif %}
                             </div>
                             {% endfor %}
                         </div>

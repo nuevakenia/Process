@@ -25,16 +25,19 @@ class Unidad(models.Model):
         return self.nombre
 
 class Tarea(models.Model):
-    estado = models.IntegerField(blank=True, null=True)
     id_tarea = models.AutoField(primary_key=True)
-    nombre = models.TextField(max_length=99)
+    nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=99)
     fecha_creacion = models.DateTimeField(null=True, blank=True)
     fecha_termino = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_columna = models.ForeignKey('Columna', on_delete=models.CASCADE)
     id_tipo = models.ForeignKey('Tarea_tipo', on_delete=models.CASCADE)
     detalle = models.CharField(max_length=255)
     id_documento = models.ForeignKey('Documento', on_delete=models.CASCADE)
+    estado = models.IntegerField(blank=True, null=True)
+    estado_avance = models.IntegerField(blank=True, null=True)
+    posicion = models.IntegerField(blank=False, null=False)
 
 class Tarea_tipo(models.Model):
     id_tipo = models.AutoField(primary_key=True)

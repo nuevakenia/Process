@@ -50,6 +50,8 @@ def inicio(request):
         usr = get_object_or_404(Usuario, user=usuario.id)
         ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
         return redirect('tablero', id=usr.ultimo_tablero)
+    else:
+        return redirect('registro')
     return render(request, "inicio.html")
 
 def pagina_logout(request):
@@ -108,7 +110,6 @@ def pagina_registro(request):
 
 ##
 
-
 @login_required(login_url="login")
 def tablero(request,id):
     usuario = request.user
@@ -117,11 +118,14 @@ def tablero(request,id):
     dataTableroEscogido = get_object_or_404(Tablero, id_tablero=id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
     dataColumna = Columna.objects.filter(id_tablero=id)
-    dataTarea = Tarea.objects.filter(user=1)
-    Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)  
+    dataTarea = Tarea.objects.filter(user=usuario.id)
+    Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)
+    dataTareaColumna = Tarea.objects.filter(user=usuario.id).filter(id_columna=21)
+    colum = Columna.objects.filter(id_columna=id)  
     context = {
-    'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm()
+    'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 'col_tar' : dataTareaColumna,
     }
+    
     if request.method == 'GET':
         if 'crear_columna' in request.POST:
             formulario = ColumnaForm(request.POST or None)
@@ -237,21 +241,8 @@ def crear_tarea(request):
         'form': TareaForm()
     }
     usuario = request.user
-
-    dict_inicial = {
-        "nombre" : "Nombre de la tarea",    
-        "descripcion" : "Descripcion de la tarea", 
-        "fecha_creacion" : "Fecha de creacion de la tarea", 
-        "fecha_termino" : "Fecha de termino de la tarea",
-        "user" : 1,
-        "id_tipo" : 1, 
-        "detalle" : "",
-        "detalle" : "Deta de la tarea",
-        "id_documento" : 1
-    }
-
     if request.method == 'POST':
-        formulario = TareaForm(request.POST or None, initial = dict_inicial)
+        formulario = TareaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero seleccionado con éxito!')

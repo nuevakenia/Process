@@ -95,14 +95,22 @@ class TareaForm(forms.ModelForm):
         model = Tarea
         fecha_creacion = forms.DateTimeField()
         fecha_termino = forms.DateTimeField()
-        fields = ('nombre','descripcion','fecha_creacion','fecha_termino'
-        ,'id_tipo','detalle','id_documento','user')
+        fields = ('nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
+        ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion')
     def save(self, commit=True):
         user = super().save(commit=False)
         user.id = self.cleaned_data['user']
         if commit:
             user.save()
         return user
+
+class TareaColumnaForm(forms.ModelForm):
+    class Meta:
+        model = Tarea_columna
+        fecha_creacion = forms.DateTimeField()
+        fecha_termino = forms.DateTimeField()
+        fields = ('fecha_creacion','fecha_termino')
+
 
 class TareaTipoForm(forms.ModelForm):
     class Meta:
