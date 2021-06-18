@@ -32,26 +32,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-      </div>
       {% endblock %}
 </html>
-
-
-                {% for tab in tableros %}
-                    <form id="SeleccionarTableroForm" action="{{ tab.id_tablero }}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="tablero_seleccionado" value="{{ tab.id_columna }}" />
-                    <li><a class="dropdown-item" type="submit" >{{ tab.nombre }}</a></li>
-                    
-                    </form>
-                    {% endfor %}
-                </ul>
-              </div>
-            </div>
-            <div class="col-12">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Crear Columna</button>
-
-                <a href="#" onclick="confirmarAgregar({{ co.id_columna }})" class="btn btn-danger" role="button"
-                    aria-pressed="true">Eliminar Columna</a>

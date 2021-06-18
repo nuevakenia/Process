@@ -115,16 +115,17 @@ def tablero(request,id):
     usuario = request.user
     ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
     dataTablero = Tablero.objects.filter(user=usuario.id)
+    nombreTablero = Tablero.objects.get(id_tablero=id)
     dataTableroEscogido = get_object_or_404(Tablero, id_tablero=id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
-    dataColumna = Columna.objects.filter(id_tablero=id)
+    dataColumna = Columna.objects.filter(id_tablero=id).order_by('posicion')
     dataTarea = Tarea.objects.filter(user=usuario.id).values('id_tarea','nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
-    ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion')
+    ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion').order_by('posicion')
     Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)
     dataTareaColumna = Tarea.objects.filter(user=usuario.id).filter(id_columna=21)
     colum = Columna.objects.filter(id_columna=id)  
     context = {
-    'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 'col_tar' : dataTareaColumna,
+    'tablero' : nombreTablero,'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 'col_tar' : dataTareaColumna,
     }
     
     if request.method == 'GET':
@@ -170,6 +171,7 @@ def pagina_login(request):
 
     return render(request, 'login.html',{'titulo':'Identifícate'})
 
+@login_required(login_url="login")
 def crear_columna(request):
     context = {
         'form':ColumnaForm()
@@ -189,68 +191,60 @@ def crear_columna(request):
         context['form']= formulario
     return render(request, "crear_columna.html", context)
 
-def listar_tareas(request):
-    tableros = Tablero.objects.all()
-    data = {'tableros':tableros}
-    return render(request, "xxtablero.html", data)
-
 @login_required(login_url="login")
 def crear_tablero(request):
-    context ={}
-    usuario = request.user
+    context ={
+        'form':TableroForm()
+    }
     if request.method == 'POST':
         formulario = TableroForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
-            print("Ultimo tablero: ", ult_tablero)
-            usr = get_object_or_404(Tablero, id_tablero=usuario.id)
             messages.success(request, 'Tablero creado correctamente')
-          #  nuevo_tablero = formulario.cleaned_data.get('nombre')
-           # print("id tablero creado ",nuevo_tablero)
-            return redirect('tablero', id=ult_tablero)
-        context['form']= formulario
+        context['form']=formulario
     return render(request, "crear_tablero.html", context)   
 
 def barmenu(request):
 
     return render(request, "barmenu.html")
 
-def tarea_tipo(request):
-    context = {
-        'form': TareaTipoForm()
-    } 
-    usuario = request.user
 
-    dict_inicial = {
-        "nombre" : "Nombre Tarea Tipo",
-        "descripcion" : "Descripción Tarea Tipo",
-        "id_documento" : 1
+class Tarea_Tipo(View):
+    def get(self, request,*args,**kwargs):
+        context = {
+            'form': TareaTipoForm()
         }
+        return render(request, "tarea_tipo.html", context)
 
-    if request.method == 'POST':
-        formulario = TareaTipoForm(request.POST or None, initial = dict_inicial)
+    def post(self, request,*args,**kwargs):
+        context = {
+            'form': TareaTipoForm()
+        }
+        formulario = TareaTipoForm()
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tarea Tipo submission successful')
+            messages.success(request, 'Tablero seleccionado con éxito!')
         context['tarea_tipo']= formulario
-    return render(request, "tarea_tipo.html", context)
+        return render(request, "tarea_tipo.html", context)
 
 
-def crear_tarea(request):
-    context = {
-        'form': TareaForm()
-    }
-    usuario = request.user
-    if request.method == 'POST':
+class Crear_Tarea(View):
+    def get(self, request,*args,**kwargs):
+        context = {
+            'form': TareaForm()
+        }
+        return render(request, "crear_tarea.html", context)
+
+    def post(self, request,*args,**kwargs):
+        context = {
+            'form': TareaForm()
+        }
         formulario = TareaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero seleccionado con éxito!')
         context['crear_tarea']= formulario
-
-    return render(request, "crear_tarea.html", context)
-
+        return render(request, "crear_tarea.html", context)
 
 
 def crear_documento(request):
@@ -280,6 +274,47 @@ class ModificarTablero(View):
         return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
 
     '''
+@login_required(login_url="login")
+def crear_tablero(request):
+    context ={
+        'form':TableroForm()
+    }
+    usuario = request.user
+    if request.method == 'POST':
+        formulario = TableroForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
+            print("Ultimo tablero: ", ult_tablero)
+            usr = get_object_or_404(Tablero, user=usuario.id).filter(id_tablero=ult_tablero)
+            messages.success(request, 'Tablero creado correctamente')
+          #  nuevo_tablero = formulario.cleaned_data.get('nombre')
+           # print("id tablero creado ",nuevo_tablero)
+            return redirect('tablero', id=ult_tablero)
+        context['form']=formulario
+    return render(request, "crear_tablero.html", context)   
+
+
+
+def crear_tarea(request):
+    context = {
+        'form': TareaForm()
+    }
+    usuario = request.user
+    if request.method == 'POST':
+        formulario = TareaForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Tablero seleccionado con éxito!')
+        context['crear_tarea']= formulario
+
+    return render(request, "crear_tarea.html", context)
+
+
+
+
+
+
 class ModificarTablero(View):
 
     def get(self, request, *args, **kwargs):

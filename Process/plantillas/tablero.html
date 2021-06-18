@@ -13,7 +13,7 @@
 <script src="{% static 'js/confirmacion.js' %} "></script>
 
 <div class="container">
-    
+    <p><h2>Tablero: {{ tablero }} ID: {{ tablero.id_tablero}}</h2>
     <div class="col-12">
 
             <div class="row">
@@ -98,10 +98,12 @@
         </div>
     </div>
 </div>
+<!-- End Modal -->
+
 <span class="border border-secondary border-3 rounded">
-<div class="container fluid" id="footer">
+<div class="container fluid" id="Separacion_titulos">
     
-    <div class="row flex-row flex-nowrap">
+    <div class="row">
         
         {% for co in columnas %}
         <div class="col-4" id="columna">
@@ -118,42 +120,42 @@
                                 {% if tar.id_columna == co.id_columna %}
                                 <div class="list-group-item">
                                     
-                                <a href="#" onclick="confirmarModificarTar({{ co.id_columna }})"
-                                    class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
+                                <a href="{% url 'admin:core_tarea_change' tar.id_tarea %}" class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
 
                                      <h5>nombre: {{ tar.nombre }}</h5>
                                 
                                     descripcion: {{ tar.descripcion }}
                                   
-                                    {% endif %}
+                                    
                                 </div>
-                                    {% endfor %}   
+                                {% endif %}
+                                    
                           
                            
                         </div>
+                        {% endfor %}   
                         <div class="float-end" id="boton_tarea">
                             <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
                                 data-bs-content="Proximamente">Crear Tarea</button>
-                                <script>
-                                    var list = document.getElementsByClassName("list-group");
-                                    for (var i = 0; i < list.length; i++) {
-                                     list[i].setAttribute("id", "columnas" + i);
-                                    }
-                                  </script>
+                               
                         </div>
                     
                 </div>
+                
             </div>
+            
         </span>
+        
         </div>
         {% endfor %}
-    
+       
     </div>
     
 </div>
+
 </span>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<script src="{% static 'js/options.js' %} "></script>
+
 {% endblock %}
 
 </html>

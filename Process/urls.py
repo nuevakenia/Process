@@ -19,8 +19,8 @@ from django.contrib.auth import views as auth_views
 
 from Process.views import (inicio, pagina_logout,pagina_login
 ,pagina_registro,tablero,crear_tablero,barmenu, crear_columna, 
-crear_tarea, tarea_tipo, crear_documento, ModificarTablero,
-custom_page_not_found, custom_server_error)
+Tarea_Tipo, crear_documento, ModificarTablero,
+custom_page_not_found, custom_server_error,Crear_Tarea)
 from Process import views
 from django.conf import settings
 from django.templatetags.static import static
@@ -42,8 +42,8 @@ urlpatterns = [
     path('crear_tablero/', crear_tablero, name="crear_tablero"),
     path('tablero/', tablero, name="tablero"),
     path('crear_columna/', crear_columna, name="crear_columna"),
-    path('tarea_tipo/', tarea_tipo, name="tarea_tipo"),
-    path('crear_tarea/', crear_tarea, name="crear_tarea"),
+    path('tarea_tipo/', Tarea_Tipo.as_view(), name="tarea_tipo"),
+    path('crear_tarea/', Crear_Tarea.as_view(), name="crear_tarea"),
     path('crear_documento/', crear_documento, name="crear_documento"),
     path('modificar_tablero/', ModificarTablero.as_view(), name="modificar_tablero"),
     path("404/", custom_page_not_found, name="custom_page_not_found"),

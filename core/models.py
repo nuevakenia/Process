@@ -38,18 +38,24 @@ class Tarea(models.Model):
     estado = models.IntegerField(blank=True, null=True)
     estado_avance = models.IntegerField(blank=True, null=True)
     posicion = models.IntegerField(blank=False, null=False)
+    def __str__(self):
+        return self.nombre
 
 class Tarea_tipo(models.Model):
     id_tipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=99)
     id_documento = models.ForeignKey('Documento', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nombre
 
 class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=255)
-
+    def __str__(self):
+        return self.nombre
+        
 class Tablero(models.Model):
     id_tablero = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
@@ -64,7 +70,9 @@ class Columna(models.Model):
     posicion = models.IntegerField(blank=False, null=False)
     descripcion = models.CharField(max_length=255)
     id_tablero = models.ForeignKey(Tablero, on_delete=models.CASCADE)
-    
+    def __str__(self):
+        return self.nombre
+
 class Tarea_columna(models.Model):
     id_tarea_columna = models.AutoField(primary_key=True)
     id_tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
@@ -78,4 +86,5 @@ class Comentario(models.Model):
     comentario = models.CharField(max_length=255)
     id_tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
     reporte = models.BooleanField()
-    
+    def __str__(self):
+        return self.asunto

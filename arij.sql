@@ -13,6 +13,7 @@ python manange.py migrations
 migrarlo a la base de datos y actualizarla, debemos Dropear todas las tablas de la BD con
 el listado de comandos de abajo.
 
+
 ---------------------SYS-------------------------------
 CREATE USER arij IDENTIFIED BY 123;
 GRANT CONNECT, RESOURCE TO arij;
@@ -48,4 +49,17 @@ DROP TABLE "ARIJ"."CORE_TABLERO" CASCADE CONSTRAINTS;
 DROP TABLE "ARIJ"."CORE_TAREA" CASCADE CONSTRAINTS;
 DROP TABLE "ARIJ"."CORE_TAREA_COLUMNA" CASCADE CONSTRAINTS;
 DROP TABLE "ARIJ"."CORE_TAREA_TIPO" CASCADE CONSTRAINTS;
+DROP TABLE "ARIJ"."CORE_UNIDAD" CASCADE CONSTRAINTS;
 commit;
+
+
+Trigger
+
+create or replace TRIGGER copiar_usuario AFTER INSERT ON auth_user
+   FOR EACH ROW
+BEGIN
+    INSERT INTO core_usuario 
+       (id, nombre, user_id,id_unidad_id) 
+    VALUES 
+       (:NEW.ID, :NEW.USERNAME,:NEW.ID,1);
+END;
