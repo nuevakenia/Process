@@ -25,7 +25,7 @@
                     {% csrf_token %}
                     
                     <table class="table table-bordered table-striped text-center"> 
-                        {{ tarea_tipo.as_table }} 
+                        {{ form.as_table }} 
                     </table> 
                     <button type="submit" class="btn btn-primary" name='tarea_tipo'>Crear Tarea Tipo</button>
                 </form>

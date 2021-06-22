@@ -193,15 +193,15 @@ def crear_columna(request):
 
 @login_required(login_url="login")
 def crear_tablero(request):
-    context ={
-        'form':TableroForm()
-    }
+    context ={'form':TableroForm()}
+    usuario = request.user
     if request.method == 'POST':
         formulario = TableroForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero creado correctamente')
-        context['form']=formulario
+            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
+        context = {'form': formulario}
     return render(request, "crear_tablero.html", context)   
 
 def barmenu(request):
@@ -217,14 +217,11 @@ class Tarea_Tipo(View):
         return render(request, "tarea_tipo.html", context)
 
     def post(self, request,*args,**kwargs):
-        context = {
-            'form': TareaTipoForm()
-        }
         formulario = TareaTipoForm()
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero seleccionado con éxito!')
-        context['tarea_tipo']= formulario
+        context = {'form': formulario }
         return render(request, "tarea_tipo.html", context)
 
 
@@ -236,14 +233,13 @@ class Crear_Tarea(View):
         return render(request, "crear_tarea.html", context)
 
     def post(self, request,*args,**kwargs):
-        context = {
-            'form': TareaForm()
-        }
         formulario = TareaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero seleccionado con éxito!')
-        context['crear_tarea']= formulario
+        context = {
+        'form': formulario
+        }
         return render(request, "crear_tarea.html", context)
 
 

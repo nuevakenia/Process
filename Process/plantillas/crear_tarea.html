@@ -1,35 +1,35 @@
 
-{% extends "base.html" %}
-{% load static %}
-<!doctype html>
-  <html lang="en">
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{% block title %}Crear Tarea Ari-J{% endblock %}</title>
-      {% block content %}
-      <div class="container-fluid">
-        <div class="row mt-5">
-            <div class="col-12 my-5">
-                <h1 style="font-size: 42;">Crear Tarea</h1>
-                {% if messages %}
-                <ul class="messages">
-        {% for message in messages %}
-        
-        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %} 
-                    <table class="table table-bordered table-striped text-center"> 
-                        {{ crear_tarea.as_table }} 
-                    </table> 
-                    <button type="submit" class="btn btn-primary" name='crear_tarea'>Crear Tarea</button>
-                </form>
+    {% extends "base.html" %}
+    {% load static %}
+    <!doctype html>
+    <html lang="en">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Crear Tarea Ari-J{% endblock %}</title>
+        {% block content %}
+        <div class="container-fluid">
+            <div class="row mt-5">
+                <div class="col-12 my-5">
+                    <h1 style="font-size: 42;">Crear Tarea</h1>
+                    {% if messages %}
+                    <ul class="messages">
+            {% for message in messages %}
+            
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        <table class="table table-bordered table-striped text-center"> 
+                            {{ form.as_table }} 
+                        </table> 
+                        <button type="submit" class="btn btn-primary" name='crear_tarea'>Crear Tarea</button>
+                    </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-      </div>
-      {% endblock %}
-</html>
+        {% endblock %}
+    </html>

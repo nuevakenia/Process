@@ -1,5 +1,6 @@
-    const tareas = document.getElementById('tareas2');
-    const columnas = document.getElementById('columnas2');
+
+    const tareas = document.getElementsByClassName('list-group-item');
+    const columnas = document.getElementById('columnas');
 
     new Sortable(tareas, {
         group: 'shared', 

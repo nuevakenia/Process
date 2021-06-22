@@ -154,8 +154,16 @@
 </div>
 
 </span>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script>
+    var list = document.getElementsByClassName("tareas");
+    for (var i = 0; i < list.length; i++) {
+     list[i].setAttribute("id", "tareas" + i);
+    }
+    </script>
+        
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script type="text/javascript" src="{% static 'js/options.js' %}"></script> 
 {% endblock %}
 
 </html>
