@@ -123,9 +123,13 @@ def tablero(request,id):
     ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion').order_by('posicion')
     Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)
     dataTareaColumna = Tarea.objects.filter(user=usuario.id).filter(id_columna=21)
-    colum = Columna.objects.filter(id_columna=id)  
+    colum = Columna.objects.filter(id_columna=id)
+    modTarea = 1
     context = {
-    'tablero' : nombreTablero,'tableros' : dataTablero,'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 'col_tar' : dataTareaColumna,
+    'tablero' : nombreTablero,'tableros' : dataTablero,
+    'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),
+    'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 
+    'col_tar' : dataTareaColumna, 'mod_tarea' : modTarea,
     }
     
     if request.method == 'GET':
@@ -151,7 +155,8 @@ def tablero(request,id):
                 form_tab_seleccionado.save()
                 return redirect('tablero/',id)
             context['formSelcTab']= form_tab_seleccionado  
-               # print("Exito,Nuevo tablero ID: ",dataUltTablero)              
+               # print("Exito,Nuevo tablero ID: ",dataUltTablero)
+                                 
     return render(request, "tablero.html", context)
 
 def pagina_login(request):

@@ -60,6 +60,8 @@
   </div>
 </div>
 <!--  End Modal -->
+
+<!-- Button trigger modal -->
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop">Crear Columna</button>
@@ -118,10 +120,39 @@
                         <div class="list-group" id="tareas">
 
                                 {% if tar.id_columna == co.id_columna %}
-                                <div class="list-group-item">
-                                    
-                                <a href="{% url 'admin:core_tarea_change' tar.id_tarea %}" class="btn btn-danger btn-sm float-end" role="button" aria-pressed="true">...</a>
+                                <div class="list-group-item xd">
+                                <!-- Modal Button -->    
+                                <a href="#" class="btn btn-danger btn-sm float-end"
+                                 role="button" aria-pressed="true" data-bs-toggle="modal" data-bs-target="#ModalModificarTarea">...</a>
+                                 <!-- Modal Button -->
 
+                                <!-- Modal -->
+                                <div class="modal fade" id="ModalModificarTarea" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                    aria-labelledby="ModalModificarTareaLabel" aria-hidden="true">
+                                    <div class="modal-dialog ">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalModificarTareaLabel">Modificar Tarea</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        {{ mod_tarea.as_table }}
+                                                    </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary" name='crear_columna'>Crear Columna</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal -->
+                                
+                                
                                      <h5>nombre: {{ tar.nombre }}</h5>
                                 
                                     descripcion: {{ tar.descripcion }}
@@ -154,13 +185,6 @@
 </div>
 
 </span>
-<script>
-    var list = document.getElementsByClassName("tareas");
-    for (var i = 0; i < list.length; i++) {
-     list[i].setAttribute("id", "tareas" + i);
-    }
-    </script>
-        
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script type="text/javascript" src="{% static 'js/options.js' %}"></script> 
