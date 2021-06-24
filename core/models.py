@@ -30,9 +30,10 @@ class Tarea(models.Model):
     descripcion = models.CharField(max_length=99)
     fecha_creacion = models.DateTimeField(null=True, blank=True)
     fecha_termino = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    user = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_columna = models.ForeignKey('Columna', on_delete=models.CASCADE)
     id_tipo = models.ForeignKey('Tarea_tipo', on_delete=models.CASCADE)
+    tarea_hija = models.ForeignKey('Tarea', on_delete=models.CASCADE, null=True, blank=True)
     detalle = models.CharField(max_length=255)
     id_documento = models.ForeignKey('Documento', on_delete=models.CASCADE)
     estado = models.IntegerField(blank=True, null=True)
@@ -70,6 +71,7 @@ class Columna(models.Model):
     posicion = models.IntegerField(blank=False, null=False)
     descripcion = models.CharField(max_length=255)
     id_tablero = models.ForeignKey(Tablero, on_delete=models.CASCADE)
+    final = models.BooleanField()
     def __str__(self):
         return self.nombre
 
