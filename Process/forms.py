@@ -86,7 +86,7 @@ class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
         fields = ('nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
-        ,'id_tipo','tarea_hija','detalle','id_documento','estado','estado_avance','posicion')
+        ,'id_tipo','tarea_madre','detalle','id_documento','estado','estado_avance','posicion')
     def save(self, commit=True):
         user = super().save(commit=False)
         user.id = self.cleaned_data['user']
