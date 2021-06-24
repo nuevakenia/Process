@@ -152,7 +152,13 @@
                                 </div>
                                 <!-- End Modal -->
                                 
-                                
+                                {% if tar.estado_avance == 0 %}
+                                <img src="{% static 'img/greendot.png' %}" width="25" height="25">
+                                {% elif tar.estado_avance == 1 %}
+                                <img src="{% static 'img/yellowdot.png' %}" width="25" height="25">
+                                {% elif tar.estado_avance == 2 %}
+                                <img src="{% static 'img/reddot.png' %}" width="25" height="25">
+                                {% endif %}
                                      <h5>nombre: {{ tar.nombre }}</h5>
                                 
                                     descripcion: {{ tar.descripcion }}

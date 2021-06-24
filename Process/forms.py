@@ -80,13 +80,13 @@ class SeleccionarTableroForm(forms.ModelForm):
 class ColumnaForm(forms.ModelForm):
     class Meta:
         model = Columna
-        fields = ('nombre','posicion','descripcion','id_tablero')
+        fields = ('nombre','posicion','descripcion','id_tablero','final')
 
 class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
         fields = ('nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
-        ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion')
+        ,'id_tipo','tarea_hija','detalle','id_documento','estado','estado_avance','posicion')
     def save(self, commit=True):
         user = super().save(commit=False)
         user.id = self.cleaned_data['user']
@@ -101,21 +101,14 @@ class TareaColumnaForm(forms.ModelForm):
         fecha_creacion = forms.DateTimeField()
         fecha_termino = forms.DateTimeField()
         fields = ('fecha_creacion','fecha_termino')
-
+    
 
 class TareaTipoForm(forms.ModelForm):
     class Meta:
         model = Tarea_tipo
-        id_documento = forms.ModelChoiceField(queryset=Documento.objects.filter(id_documento=1))
+     #   id_documento = forms.ModelChoiceField(queryset=Documento.objects.filter(id_documento=1))
         fields = ('nombre', 'descripcion', 'id_documento')
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.id = self.cleaned_data['user']
-
-        if commit:
-            user.save()
-        return user
-        
+  
 class CrearDocumentoForm(forms.ModelForm):
     class Meta:
         model = Documento

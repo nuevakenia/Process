@@ -48,10 +48,21 @@ def inicio(request):
     usuario = request.user
     if request.method == 'GET' and usuario.is_authenticated:
         usr = get_object_or_404(Usuario, user=usuario.id)
-        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
-        return redirect('tablero', id=usr.ultimo_tablero)
+        ult_tablero = Usuario.objects.values_list('ultimo_tablero', flat=True).get(user=usr.id)
+       # ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        if ult_tablero == None:
+            return redirect('crear_tablero')
+        context = {'data':ult_tablero}
+        return redirect('tablero', id=ult_tablero)
+    elif usuario.ultimo_tablero != None:
+        return redirect('tablero', id=usuario.ultimo_tablero)
     else:
         return redirect('registro')
+
+    if request.method == 'POST' and usuario.is_authenticated:
+        usr = get_object_or_404(Usuario, user=usuario.id)
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+
     return render(request, "inicio.html")
 
 def pagina_logout(request):
@@ -182,14 +193,9 @@ def crear_columna(request):
         'form':ColumnaForm()
     } 
     usuario = request.user
-    dict_inicial = {
-        "nombre" : "Nombre Columna",
-        "posicion" : "Nombre Columna",
-        "descripcion" : "Descripción Columna",
-        "id_tablero" : 1
-        }
+
     if request.method == 'POST':
-        formulario = ColumnaForm(request.POST or None, initial = dict_inicial)
+        formulario = ColumnaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             context['mensaje'] = "Guardado correctamente"
@@ -205,7 +211,12 @@ def crear_tablero(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero creado correctamente')
-            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
+            #id_form = request.POST.get('nombre')
+            #print("la id es: ", id_form)
+            #return redirect('tablero',id_form)
+            Tab_Ordenada = Tablero.objects.order_by('id_tablero')
+            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list('id_tablero', flat=True).last()
+            return redirect('tablero',ult_tablero)
         context = {'form': formulario}
     return render(request, "crear_tablero.html", context)   
 
@@ -222,10 +233,10 @@ class Tarea_Tipo(View):
         return render(request, "tarea_tipo.html", context)
 
     def post(self, request,*args,**kwargs):
-        formulario = TareaTipoForm()
+        formulario = TareaTipoForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero seleccionado con éxito!')
+            messages.success(request, 'Tarea Tipo creada con éxito!')
         context = {'form': formulario }
         return render(request, "tarea_tipo.html", context)
 
@@ -241,7 +252,7 @@ class Crear_Tarea(View):
         formulario = TareaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero seleccionado con éxito!')
+            messages.success(request, 'Tarea Creada con éxito!')
         context = {
         'form': formulario
         }
