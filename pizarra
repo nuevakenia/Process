@@ -1,0 +1,30 @@
+<!-- Modal Button -->    
+                                <a href="#" class="btn btn-danger btn-sm float-end"
+                                 role="button" aria-pressed="true" data-bs-toggle="modal" data-bs-target="#ModalModificarTarea">...</a>
+                                 <!-- Modal Button -->
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="ModalModificarTarea" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                    aria-labelledby="ModalModificarTareaLabel" aria-hidden="true">
+                                    <div class="modal-dialog ">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalModificarTareaLabel">Modificar Tarea</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        {{ mod_tarea.as_table }}
+                                                    </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary" name='crear_columna'>Crear Columna</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>

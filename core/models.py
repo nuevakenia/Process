@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from datetime import date
+from datetime import datetime
 from django.contrib.auth.models import User
 import os
 import datetime
 from django.forms.fields import DateTimeField
+from django.core.signals import request_started, request_finished
+from django.db.models.signals import post_save, pre_save
 
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -28,8 +31,8 @@ class Tarea(models.Model):
     id_tarea = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=99)
     descripcion = models.CharField(max_length=99)
-    fecha_creacion = models.DateTimeField(null=True, blank=True)
-    fecha_termino = models.DateTimeField(null=True, blank=True)
+    fecha_creacion = models.DateTimeField()
+    fecha_termino = models.DateTimeField()
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_columna = models.ForeignKey('Columna', on_delete=models.CASCADE)
     id_tipo = models.ForeignKey('Tarea_tipo', on_delete=models.CASCADE)
@@ -41,6 +44,9 @@ class Tarea(models.Model):
     posicion = models.IntegerField(blank=False, null=False)
     def __str__(self):
         return self.nombre
+
+
+
 
 class Tarea_tipo(models.Model):
     id_tipo = models.AutoField(primary_key=True)
@@ -56,6 +62,18 @@ class Documento(models.Model):
     descripcion = models.CharField(max_length=255)
     def __str__(self):
         return self.nombre
+
+def print_semaforo(sender, instance, **kwargs):
+    
+    print("tenemos una request en TAREA")
+
+post_save.connect(print_semaforo, sender = Tarea)
+
+def print_started(sender, **kwargs):
+    
+    print("tenemoos una request de DOCUMENTO")
+
+request_started.connect(print_started)
 
 class Tablero(models.Model):
     id_tablero = models.AutoField(primary_key=True)

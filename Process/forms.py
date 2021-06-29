@@ -4,6 +4,7 @@ from core.models import Documento, Usuario, Tablero, Unidad , Tablero, Tarea, Ta
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import request
+from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
 
 
 class ExtendedUserCreationForm(UserCreationForm):
@@ -82,9 +83,33 @@ class ColumnaForm(forms.ModelForm):
         model = Columna
         fields = ('nombre','posicion','descripcion','id_tablero','final')
 
+class DateTimeInput(forms.DateInput):
+    input_type = 'datetime-local'
+
 class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
+        widgets = {'fecha_creacion' : DateTimeInput(), 'fecha_termino' : DateTimeInput()}
+        fields = ('nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
+        ,'id_tipo','tarea_madre','detalle','id_documento','estado','estado_avance','posicion')
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.id = self.cleaned_data['user']
+
+        if commit:
+            user.save()
+        return user
+
+class ModificarTareaForm(forms.ModelForm):
+    class Meta:
+        model = Tarea
+        widgets = {
+        'descripcion': forms.HiddenInput(), 'fecha_creacion': forms.HiddenInput(), 'fecha_termino': forms.HiddenInput(),
+        'id_tipo': forms.HiddenInput(), 'tarea_madre': forms.HiddenInput(), 'detalle': forms.HiddenInput(), 'id_documento': forms.HiddenInput(),
+        'estado': forms.HiddenInput(), 'estado_avance': forms.HiddenInput(), 'posicion': forms.HiddenInput(), 
+        }
+        #id_tablero = 
+       # id_columna = forms.ModelChoiceField(Columna.objects.filter(id_tablero=id).order_by('posicion'), required=True)
         fields = ('nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
         ,'id_tipo','tarea_madre','detalle','id_documento','estado','estado_avance','posicion')
     def save(self, commit=True):
