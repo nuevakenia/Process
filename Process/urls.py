@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from Process.views import (inicio, pagina_logout,pagina_login
+from Process.views import (calcular_carga, inicio, pagina_logout,pagina_login
 ,pagina_registro,tablero,crear_tablero,barmenu, crear_columna, 
 Tarea_Tipo, crear_documento, ModificarTablero,
 custom_page_not_found, custom_server_error,Crear_Tarea)
@@ -48,7 +48,9 @@ urlpatterns = [
     path('modificar_tablero/', ModificarTablero.as_view(), name="modificar_tablero"),
     path("404/", custom_page_not_found, name="custom_page_not_found"),
     path("500/", custom_server_error, name="custom_server_error"),
+    path('calcular_carga/<id>/', calcular_carga, name="calcular_carga"),
     
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler500 = "Process.views.custom_server_error"

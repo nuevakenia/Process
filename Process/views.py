@@ -274,6 +274,17 @@ class ModificarTablero(View):
         tableros = Tablero.objects.filter(id_tablero=ult_tablero[0:1].get())
         return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
 
+def calcular_carga(request,id):
+    context = {
+        
+    } 
+    if request.method == 'GET':
+            tablero = Tablero.objects.filter(id_tablero=id)
+            cantidad_tareas = tablero.count()
+            context['cantidad_tareas'] = cantidad_tareas
+    return render(request, "calcular_carga.html", context)
+
+
     '''
 @login_required(login_url="login")
 def crear_tablero(request):
