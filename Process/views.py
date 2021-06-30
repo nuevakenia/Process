@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm
+from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm,ModificarTareaForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
 from django.http import HttpResponse, request
 from django.template import Template, Context, RequestContext
 from django.template.loader import get_template
-from django.utils import timezone
+#from django.utils import timezone
+from datetime import datetime, timezone, date
 from django.db.models.functions import Concat
 
 from django.views.generic import ListView
@@ -25,6 +26,7 @@ import locale
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.aggregates import Sum
+from _datetime import timedelta
 # CACHE
 # from django.views.decorators.cache import cache_page
 
@@ -48,10 +50,21 @@ def inicio(request):
     usuario = request.user
     if request.method == 'GET' and usuario.is_authenticated:
         usr = get_object_or_404(Usuario, user=usuario.id)
-        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
-        return redirect('tablero', id=usr.ultimo_tablero)
+        ult_tablero = Usuario.objects.values_list('ultimo_tablero', flat=True).get(user=usr.id)
+       # ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+        if ult_tablero == None:
+            return redirect('crear_tablero')
+        context = {'data':ult_tablero}
+        return redirect('tablero', id=ult_tablero)
+    elif usuario.ultimo_tablero != None:
+        return redirect('tablero', id=usuario.ultimo_tablero)
     else:
         return redirect('registro')
+
+    if request.method == 'POST' and usuario.is_authenticated:
+        usr = get_object_or_404(Usuario, user=usuario.id)
+        ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
+
     return render(request, "inicio.html")
 
 def pagina_logout(request):
@@ -107,8 +120,41 @@ def pagina_registro(request):
         context = {'formularioRegistro' : formularioRegistro, 'usuario_form' : usuario_form}
         return render(request, 'registro.html', context)
 
+def modi_tarea(request,id_tarea,id_tablero):
+    dataColumna = Columna.objects.filter(id_tablero=id_tablero).order_by('posicion')
+    dataTarea = Tarea.objects.filter(id_tarea=id_tarea)
+    dataTareaEscogida = get_object_or_404(Tarea, id_tarea=id_tarea)
+    context = {
+        'formModificarTarea':ModificarTareaForm(instance=dataTareaEscogida)
+    } 
+    return context
 
-##
+def actualizar_semaforo(id_tablero):
+    todas_columnas = Columna.objects.filter(id_tablero=id_tablero)
+    
+    tarList = []
+    for x in todas_columnas:
+        print("id columna: ", x)
+        todas_tareas = Tarea.objects.filter(id_columna=x)
+        for i in todas_tareas:
+            if i.fecha_termino == None or i.fecha_creacion == None:
+                print("La tarea: ",i.nombre,"No tiene fecha de termino o creación")
+
+            else:
+                print("nombre tarea: ",i.nombre," fecha hoy: ", datetime.now(timezone.utc))
+                promedio_general = i.fecha_termino - i.fecha_creacion
+                promedio_actual = (i.fecha_termino - datetime.now(timezone.utc))
+                print("promedio general: ", promedio_general.days)
+                print("promedio Actual: ", promedio_actual.days)
+                operacion = round((promedio_actual.days*100)/promedio_general.days , 1 )
+                print("Resultado operacion: ", operacion)
+                if operacion >= 50:
+                    update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=0)
+                elif operacion >= 0:
+                    update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=1)
+                elif operacion <= 0:
+                    update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=2)
+
 
 @login_required(login_url="login")
 def tablero(request,id):
@@ -116,23 +162,23 @@ def tablero(request,id):
     ult_tablero = Usuario.objects.filter(user=usuario.id).values_list("ultimo_tablero", flat=True)
     dataTablero = Tablero.objects.filter(user=usuario.id)
     nombreTablero = Tablero.objects.get(id_tablero=id)
+    dataColumna = Columna.objects.filter(id_tablero=id).order_by('posicion')
     dataTableroEscogido = get_object_or_404(Tablero, id_tablero=id)
     dataUltTablero = Tablero.objects.filter(id_tablero=ult_tablero)
-    dataColumna = Columna.objects.filter(id_tablero=id).order_by('posicion')
     dataTarea = Tarea.objects.filter(user=usuario.id).values('id_tarea','nombre','descripcion','fecha_creacion','fecha_termino','user', 'id_columna'
     ,'id_tipo','detalle','id_documento','estado','estado_avance','posicion').order_by('posicion')
     Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=id)
     dataTareaColumna = Tarea.objects.filter(user=usuario.id).filter(id_columna=21)
     colum = Columna.objects.filter(id_columna=id)
-    modTarea = 1
     context = {
     'tablero' : nombreTablero,'tableros' : dataTablero,
     'formSelcTab' : SeleccionarTableroForm(instance=dataTableroEscogido),
     'columnas' : dataColumna, 'tareas' : dataTarea ,'crear_columnas' : ColumnaForm(), 
-    'col_tar' : dataTareaColumna, 'mod_tarea' : modTarea,
+    'col_tar' : dataTareaColumna,
     }
     
     if request.method == 'GET':
+        actualizar_semaforo(id)
         if 'crear_columna' in request.POST:
             formulario = ColumnaForm(request.POST or None)
             if formulario.is_valid():
@@ -141,13 +187,6 @@ def tablero(request,id):
                 context['crear_columnas']= formulario
                 
     if request.method == 'POST':
-        if 'crear_columna' in request.POST:
-            formulario = ColumnaForm(request.POST or None)
-            if formulario.is_valid():
-                formulario.save()
-                context['mensaje'] = "Guardado correctamente"
-                context['crear_columnas']= formulario
-
         if 'tablero_seleccionado' in request.POST:
             form_tab_seleccionado = SeleccionarTableroForm(request.POST, instance=dataTableroEscogido)
             #Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ultimo_tablero)
@@ -156,8 +195,12 @@ def tablero(request,id):
                 return redirect('tablero/',id)
             context['formSelcTab']= form_tab_seleccionado  
                # print("Exito,Nuevo tablero ID: ",dataUltTablero)
-                                 
+        
+    
     return render(request, "tablero.html", context)
+
+
+
 
 def pagina_login(request):
     if request.method == 'POST':
@@ -182,14 +225,9 @@ def crear_columna(request):
         'form':ColumnaForm()
     } 
     usuario = request.user
-    dict_inicial = {
-        "nombre" : "Nombre Columna",
-        "posicion" : "Nombre Columna",
-        "descripcion" : "Descripción Columna",
-        "id_tablero" : 1
-        }
+
     if request.method == 'POST':
-        formulario = ColumnaForm(request.POST or None, initial = dict_inicial)
+        formulario = ColumnaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
             context['mensaje'] = "Guardado correctamente"
@@ -205,7 +243,12 @@ def crear_tablero(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tablero creado correctamente')
-            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list("id_tablero", flat=True).last()
+            #id_form = request.POST.get('nombre')
+            #print("la id es: ", id_form)
+            #return redirect('tablero',id_form)
+            Tab_Ordenada = Tablero.objects.order_by('id_tablero')
+            ult_tablero = Tablero.objects.filter(user=usuario.id).values_list('id_tablero', flat=True).last()
+            return redirect('tablero',ult_tablero)
         context = {'form': formulario}
     return render(request, "crear_tablero.html", context)   
 
@@ -222,10 +265,10 @@ class Tarea_Tipo(View):
         return render(request, "tarea_tipo.html", context)
 
     def post(self, request,*args,**kwargs):
-        formulario = TareaTipoForm()
+        formulario = TareaTipoForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero seleccionado con éxito!')
+            messages.success(request, 'Tarea Tipo creada con éxito!')
         context = {'form': formulario }
         return render(request, "tarea_tipo.html", context)
 
@@ -241,7 +284,7 @@ class Crear_Tarea(View):
         formulario = TareaForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero seleccionado con éxito!')
+            messages.success(request, 'Tarea Creada con éxito!')
         context = {
         'form': formulario
         }
@@ -286,6 +329,19 @@ def calcular_carga(request,id):
 
 
     '''
+
+        if 'modificar_tarea' in request.POST:
+            form_tarea_seleccionado = ModificarTareaForm(request.POST,instance=dataTableroEscogido)
+            columna = get_object_or_404(Columna, id_tablero=id)
+           # nueva_tarea = form_tab_seleccionado.save(commit=False)
+           # Tarea.objects.filter(id_tarea=SeleccionarTableroForm.id_Tablero).update(id_columna= += 1)
+           # Tarea.objects.filter(id_tarea=SeleccionarTableroForm.id_Tablero).update(id_columna= )
+            if form_tarea_seleccionado.is_valid():
+                form_tarea_seleccionado.save()
+                context['mensaje'] = "Guardado correctamente"
+            context['formModificarTarea']= form_tarea_seleccionado  
+
+
 @login_required(login_url="login")
 def crear_tablero(request):
     context ={
