@@ -66,6 +66,18 @@ load_dotenv()
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
+#CONFIGURACION CORREO ELECTRONICO
+EMAIL = os.getenv('EMAIL')
+PASSWD = os.getenv('PASSWD')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = EMAIL  #DIRECCION DE CORREO ELECTRONICO
+EMAIL_HOST_PASSWORD = PASSWD #PASSWORD DEL CORREO ELECTRONICO
+
+
 RUTA = os.getenv('RUTA')
 
 TEMPLATES = [
