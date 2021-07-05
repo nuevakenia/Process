@@ -1,3 +1,4 @@
+from django.db.models.signals import post_save
 from django.shortcuts import redirect, render
 from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm,ModificarTareaForm
 from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
@@ -26,7 +27,10 @@ import locale
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.aggregates import Sum
-from _datetime import timedelta
+from datetime import timedelta
+
+from django.core.mail import send_mail
+from django.conf import settings
 # CACHE
 # from django.views.decorators.cache import cache_page
 
@@ -128,14 +132,21 @@ def modi_tarea(request,id_tarea,id_tablero):
         'formModificarTarea':ModificarTareaForm(instance=dataTareaEscogida)
     } 
     return context
+    
+def print_semaforo(sender, instance, **kwargs):
+    
+    print("tenemos una request en TAREA")
 
-def actualizar_semaforo(id_tablero):
+post_save.connect(print_semaforo, sender = Tarea)
+
+def actualizar_semaforo(id_tablero, request):
     todas_columnas = Columna.objects.filter(id_tablero=id_tablero)
     
     tarList = []
     for x in todas_columnas:
         print("id columna: ", x)
         todas_tareas = Tarea.objects.filter(id_columna=x)
+        user = request.user
         for i in todas_tareas:
             if i.fecha_termino == None or i.fecha_creacion == None:
                 print("La tarea: ",i.nombre,"No tiene fecha de termino o creación")
@@ -152,8 +163,23 @@ def actualizar_semaforo(id_tablero):
                     update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=0)
                 elif operacion >= 0:
                     update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=1)
+                    subject = f'Estado de la tarea {i.nombre}'
+                    message = f'Hola {user.username}, La tarea {i.nombre} esta apunto de vencer su plazo'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [user.email, ]
+                    send_mail( subject, message, email_from, recipient_list )
+
+                    print("estado 1")
+
+
                 elif operacion <= 0:
                     update_estado = Tarea.objects.filter(id_tarea=i.id_tarea).update(estado_avance=2)
+                    subject = f'Estado de la tarea {i.nombre}'
+                    message = f'Hola {user.username}, La tarea {i.nombre} esta apunto de vencer esta atrasada'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [user.email, ]
+                    send_mail( subject, message, email_from, recipient_list )
+                    print("estado 2")
 
 
 @login_required(login_url="login")
@@ -178,7 +204,7 @@ def tablero(request,id):
     }
     
     if request.method == 'GET':
-        actualizar_semaforo(id)
+        actualizar_semaforo(id, request)
         if 'crear_columna' in request.POST:
             formulario = ColumnaForm(request.POST or None)
             if formulario.is_valid():
