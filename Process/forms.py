@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, fields
-from core.models import Documento, Usuario, Tablero, Unidad , Tablero, Tarea, Tarea_columna, Columna, Tarea_tipo
+from core.models import Documento, Usuario, Tablero, Unidad , Tablero, Tarea, Columna, Tarea_tipo, Flujo, Flujo_detalle
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import request
@@ -120,14 +120,6 @@ class ModificarTareaForm(forms.ModelForm):
             user.save()
         return user
 
-class TareaColumnaForm(forms.ModelForm):
-    class Meta:
-        model = Tarea_columna
-        fecha_creacion = forms.DateTimeField()
-        fecha_termino = forms.DateTimeField()
-        fields = ('fecha_creacion','fecha_termino')
-    
-
 class TareaTipoForm(forms.ModelForm):
     class Meta:
         model = Tarea_tipo
@@ -137,4 +129,20 @@ class TareaTipoForm(forms.ModelForm):
 class CrearDocumentoForm(forms.ModelForm):
     class Meta:
         model = Documento
-        fields = ('nombre', 'descripcion')
+        archivo = forms.FileField()
+        fields = ('nombre', 'descripcion', 'archivo')
+
+class CrearFlujoForm(forms.ModelForm):
+    class Meta:
+        model = Flujo
+        fields = ('nombre','descripcion')
+
+class EjecutarFlujoForm(forms.ModelForm):
+    class Meta:
+        model = Flujo_detalle
+        fields = ('id_flujo','id_tarea','posicion_tarea', 'id_columna')
+
+class ListadoFlujoForm(forms.ModelForm):
+    class Meta:
+        model = Flujo_detalle
+        fields = ('id_flujo','id_tarea','posicion_tarea', 'id_columna')

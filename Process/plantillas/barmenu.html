@@ -13,26 +13,29 @@
           <ul class="navbar-nav w-100 justify-content-begin">
               <li class="nav-item active">
                 <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Tablero y Tareas</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'crear_tablero' %}">Crear Tablero</a></li>
+                    <li><a class="dropdown-item" href="{% url 'crear_tarea' %}">Crear Tarea</a></li>
+                    <li><a class="dropdown-item" href="{% url 'tarea_tipo' %}">Crear Tarea Tipo</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'crear_documento' %}">Crear Documento</a></li>
+                  </ul>
+                </li>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'crear_tablero' %}">Crear Tablero</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Flujos y Métricas</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'crear_flujo' %}">Crear Flujo</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ejecutar_flujo' %}">Ejecutar Flujo</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'calcular_carga' %}">Calcular Carga</a></li>
+                  <li><a class="dropdown-item" href="{% url 'calcular_avance' %}">Calcular Avance</a></li>
+                </ul>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'crear_tarea' %}">Crear Tarea</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'tarea_tipo' %}">Crear Tarea Tipo</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'crear_documento' %}">Crear Documento</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'registro' %}">Registrarse</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
-              </li>
-            </ul>
+            </li>
+              
               {% if user.is_authenticated %}
               <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
                 <li class="nav-item active">
@@ -42,10 +45,14 @@
                 
                 <a class="nav-link" href="#" >@{{ user.username }}</a>
               
-              
+              </ul>
               {% else %}
+              <ul class="nav navbar-nav ms-auto w-100 justify-content-end"></ul>
               <li class="nav-item active">
-                <a class="nav-link " href="{% url 'login' %}">Iniciar Sesión</a>
+                <a class="nav-link " href="{% url 'registro' %}">Registrarse</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link " href="{% url 'login' %}">Ingresar</a>
               </li>
             </ul>
               {% endif %}

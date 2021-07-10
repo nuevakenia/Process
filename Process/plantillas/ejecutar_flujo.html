@@ -4,14 +4,13 @@
   <html lang="en">
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{% block title %}Crear Tarea Tipo Ari-J{% endblock %}</title>
-
+      <title>{% block title %}Ejecutar Flujo Ari-J{% endblock %}</title>
       {% block content %}
       <div class="container-fluid">
         <div class="row justify-content-center align-items-center mt-5">
-            <div class="col-6  my-5">
+            <div class="col-6 my-5">
                 <div class="text-center">
-                <h1 style="font-size: 42;">Tarea Tipo</h1>
+                <h1 style="font-size: 42;">Ejecutar Flujo</h1>
                 <br>
                 {% if messages %}
                 <ul class="messages">
@@ -26,10 +25,12 @@
                     {% csrf_token %}
                     
                     <table class="table table-bordered table-striped text-center"> 
-                        {{ form.as_table }} 
+                        {{ ejecutar_flujo.as_table }} 
                     </table> 
-                    <button type="submit" class="btn btn-primary" name='tarea_tipo'>Crear Tarea Tipo</button>
+                    <button type="submit" class="btn btn-primary" name='ejecutar_flujo'>Ejecutar Flujo</button>
                 </form>
+
+                
             </div>
                     </div>
                 </div>

@@ -65,8 +65,8 @@
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop">Crear Columna</button>
-                <a href="#" onclick="confirmarEliminarCol({{ co.id_columna }})" class="btn btn-danger" role="button"
-                    aria-pressed="true">Eliminar Columna</a>
+                    <a href="{% url 'admin:core_tablero_change' tablero.id_tablero %}" class="btn btn-danger"
+                    role="button">Modificar Tablero</a>
             </div>
         </div>
     </div>
@@ -112,10 +112,11 @@
             <div class="row align-items-start">
                 <div class="list-group" id="columnas">
                     <span class="border border-primary border-3 ">
-                        <div class="col-12" id="titulo">
-                        <p><strong>{{ co.nombre }}</strong></p>
-                        <p><strong>{{ co.id_columna }}</strong></p>
-                        </div>
+                        <div class="col-12" id="boton_tarea" >
+                            
+                        <a href="{% url 'admin:core_columna_change' co.id_columna %}" class="btn btn-danger btn-sm float-end"
+                                    role="button">...</a>
+                                    <br><p><strong><h3>{{ co.nombre }}</h3></strong></p></div>
                         {% for tar in tareas %}
                         <div class="list-group" id="tareas">
 
@@ -132,11 +133,9 @@
                                 {% elif tar.estado_avance == 2 %}
                                 <img src="{% static 'img/reddot.png' %}" width="25" height="25">
                                 {% endif %}
-                                     <h5>nombre: {{ tar.nombre }}</h5>
+                                     <h5>{{ tar.nombre }}</h5>
                                 
-                                    descripcion: {{ tar.descripcion }}
-                                  
-                                    
+                                    {{ tar.descripcion }}
                                 </div>
                                 {% endif %}
                                     
@@ -144,11 +143,7 @@
                            
                         </div>
                         {% endfor %}   
-                        <div class="float-end" id="boton_tarea">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Crear Tarea"
-                                data-bs-content="Proximamente">Crear Tarea</button>
-                               
-                        </div>
+                        
                     
                 </div>
                 

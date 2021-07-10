@@ -8,8 +8,9 @@
 <title>{% block title %}Crear Tablero Ari-J{% endblock %}</title>
 {% block content %}
 <div class="container-fluid">
-    <div class="row mt-5">
-        <div class="col-12 my-5">
+    <div class="row justify-content-center align-items-center mt-5">
+        <div class="col-6 my-5 ">
+            <div class="text-center">
              <h1 style="font-size: 42;">Crear Tablero</h1>
             <br>
             {% if messages %}
@@ -21,15 +22,19 @@
 </ul>
 {% endif %}
             </p>
+            
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <table class="table table-bordered table-striped text-center">
                     {{ form.as_table }}
                 </table>
+                
+                
                 <button type="submit" class="btn btn-primary" name='crear_tablero'>Crear Tablero</button>
-
+            
             </form>
+        </div>
         </div>
     </div>
 </div>

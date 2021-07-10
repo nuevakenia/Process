@@ -11,8 +11,9 @@
         <title>{% block title %}Crear Tarea Ari-J{% endblock %}</title>
         {% block content %}
         <div class="container-fluid">
-            <div class="row mt-5">
-                <div class="col-12 my-5">
+            <div class="row justify-content-center align-items-center mt-5">
+                <div class="col-6 my-5">
+                    <div class="text-center">
                     <h1 style="font-size: 42;">Crear Tarea</h1>
                     {% if messages %}
                     <ul class="messages">
@@ -26,26 +27,11 @@
                         {% csrf_token %} 
                         <table class="table table-bordered table-striped text-center"> 
                             
-                            {{ form.as_table }}
-                           
-                                        <div class="form-group">
-                                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-                                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            $('#datetimepicker1').datetimepicker();
-                                        });
-                                    </script>
-                                
+                            {{ form.as_table }}    
                         </table> 
                         <button type="submit" class="btn btn-primary" name='crear_tarea'>Crear Tarea</button>
                     </form>
+                </div>
                         </div>
                     </div>
                 </div>

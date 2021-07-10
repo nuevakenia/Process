@@ -1,7 +1,9 @@
 from django.db.models.signals import post_save
 from django.shortcuts import redirect, render
-from .forms import ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm,ModificarTareaForm
-from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_columna, Tarea_tipo
+from .forms import (ExtendedUserCreationForm, TareaTipoForm, UsuarioForm, TableroForm, ColumnaForm, 
+TareaForm, CrearDocumentoForm, SeleccionarTableroForm, ModificarTableroForm,ListadoTableroForm,
+ModificarTareaForm, CrearFlujoForm, EjecutarFlujoForm, ListadoFlujoForm)
+from core.models import Usuario, Unidad, Tablero, Columna, Tarea, Tarea_tipo, Flujo, Flujo_detalle
 from django.http import HttpResponse, request
 from django.template import Template, Context, RequestContext
 from django.template.loader import get_template
@@ -167,7 +169,7 @@ def actualizar_semaforo(id_tablero, request):
                     message = f'Hola {user.username}, La tarea {i.nombre} esta apunto de vencer su plazo'
                     email_from = settings.EMAIL_HOST_USER
                     recipient_list = [user.email, ]
-                    send_mail( subject, message, email_from, recipient_list )
+                    #send_mail( subject, message, email_from, recipient_list )
 
                     print("estado 1")
 
@@ -178,7 +180,7 @@ def actualizar_semaforo(id_tablero, request):
                     message = f'Hola {user.username}, La tarea {i.nombre} esta apunto de vencer esta atrasada'
                     email_from = settings.EMAIL_HOST_USER
                     recipient_list = [user.email, ]
-                    send_mail( subject, message, email_from, recipient_list )
+                    #send_mail( subject, message, email_from, recipient_list )
                     print("estado 2")
 
 
@@ -205,6 +207,9 @@ def tablero(request,id):
     
     if request.method == 'GET':
         actualizar_semaforo(id, request)
+        
+                
+    if request.method == 'POST':
         if 'crear_columna' in request.POST:
             formulario = ColumnaForm(request.POST or None)
             if formulario.is_valid():
@@ -212,7 +217,6 @@ def tablero(request,id):
                 context['mensaje'] = "Guardado correctamente"
                 context['crear_columnas']= formulario
                 
-    if request.method == 'POST':
         if 'tablero_seleccionado' in request.POST:
             form_tab_seleccionado = SeleccionarTableroForm(request.POST, instance=dataTableroEscogido)
             #Usuario.objects.filter(user=usuario.id).update(ultimo_tablero=ultimo_tablero)
@@ -247,11 +251,8 @@ def pagina_login(request):
 
 @login_required(login_url="login")
 def crear_columna(request):
-    context = {
-        'form':ColumnaForm()
-    } 
+    context = {'form':ColumnaForm()} 
     usuario = request.user
-
     if request.method == 'POST':
         formulario = ColumnaForm(request.POST or None)
         if formulario.is_valid():
@@ -268,7 +269,6 @@ def crear_tablero(request):
         formulario = TableroForm(request.POST or None)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Tablero creado correctamente')
             #id_form = request.POST.get('nombre')
             #print("la id es: ", id_form)
             #return redirect('tablero',id_form)
@@ -343,7 +343,19 @@ class ModificarTablero(View):
         tableros = Tablero.objects.filter(id_tablero=ult_tablero[0:1].get())
         return render(request, "modificar_tablero.html", {"form": form, "tableros":tableros})
 
-def calcular_carga(request,id):
+def calcular_carga(request):
+    user=request.user
+    context = {
+        
+    } 
+    if request.method == 'GET':
+            Tareas = Tarea.objects.filter(user=user.id).count()
+            cantidad_tareas = Tarea.objects.filter(user=user.id).count()
+            context['cantidad_tareas'] = cantidad_tareas
+    return render(request, "calcular_carga.html", context)
+
+def calcular_avance(request):
+    # TODO
     context = {
         
     } 
@@ -351,10 +363,89 @@ def calcular_carga(request,id):
             tablero = Tablero.objects.filter(id_tablero=id)
             cantidad_tareas = tablero.count()
             context['cantidad_tareas'] = cantidad_tareas
-    return render(request, "calcular_carga.html", context)
+    return render(request, "calcular_avance.html", context)
+
+def mostrar_resumen(request):
+    # TODO
+    context = {
+        
+    } 
+    if request.method == 'GET':
+            tablero = Tablero.objects.filter(id_tablero=id)
+            cantidad_tareas = tablero.count()
+            context['cantidad_tareas'] = cantidad_tareas
+    return render(request, "mostrar_resumen.html", context)
+
+def crear_flujo(request):
+    # TODO
+    context = {
+        'crear_flujo': CrearFlujoForm()
+    } 
+    if request.method == 'POST':
+        formulario = CrearFlujoForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Flujo creado con éxito!')
+        context['crear_flujo']= formulario
+    return render(request, "crear_flujo.html", context)
+
+def ejecutar_flujo(request):
+    # TODO
+    user = request.user
+    context = {
+        'ejecutar_flujo': EjecutarFlujoForm()
+    } 
+    if request.method == 'POST':
+        if 'ejecutar_flujo' in request.POST:
+            formulario = EjecutarFlujoForm(request.POST or None)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, 'Flujo Ejecutado con éxito!')
+            context['ejecutar_flujo']= formulario
+
+    return render(request, "ejecutar_flujo.html", context)
+
+def listado_flujo(request,id):
+    # TODO
+    flujo = get_object_or_404(Flujo, id_flujo=id)
+
+    context = {
+        'form': ListadoFlujoForm(instance=flujo)
+    }  
+    
+    return render(request, "listado_flujo.html", context)
 
 
     '''
+            if 'ejecutar_tareas' in request.POST:
+            tareas = Flujo_detalle.objects.filter(id_flujo=1)
+            print(tareas)
+            for i in tareas:
+                    print("A VER", i.id_flujo)
+                    tareas_ordenadas = Tarea.objects.all().order_by('id_tarea')
+                    ultima_tarea = Tarea.objects.all().latest('id_tarea')
+                    insert_tarea = Tarea.objects.filter(id_tarea=i.id_tarea)
+                    insert_tarea.user = user
+                    insert_tarea.id = ultima_tarea.id_tarea + 1
+                    insert_tarea.posicion = i.posicion_tarea
+                    insert_tarea.id_columna = i.id_columna
+
+                    insert_tarea.save()
+                    messages.success(request, 'Flujo Ejecutado con éxito!')
+
+    if request.method == 'GET':
+            #flujo = Flujo.objects.filter(id_flujo=id)
+            flujos = Flujo.objects.all()
+
+    if request.method == 'POST':
+        formulario = EjecutarFlujoForm(request.POST or None)
+        if formulario.is_valid():
+            formulario.save()
+            #crear tablas en cada columna y tablero
+            #for que obtenga 
+            messages.success(request, 'Flujo ejecutado con éxito!')
+
+        #context['ejecutar_flujo']= formulario
 
         if 'modificar_tarea' in request.POST:
             form_tarea_seleccionado = ModificarTareaForm(request.POST,instance=dataTableroEscogido)

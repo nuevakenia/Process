@@ -19,8 +19,9 @@ from django.contrib.auth import views as auth_views
 
 from Process.views import (calcular_carga, inicio, pagina_logout,pagina_login
 ,pagina_registro,tablero,crear_tablero,barmenu, crear_columna, 
-Tarea_Tipo, crear_documento, ModificarTablero,
-custom_page_not_found, custom_server_error,Crear_Tarea)
+Tarea_Tipo, crear_documento, ModificarTablero, 
+custom_page_not_found, custom_server_error,Crear_Tarea,calcular_avance, 
+calcular_carga, mostrar_resumen,crear_flujo,listado_flujo,ejecutar_flujo)
 from Process import views
 from django.conf import settings
 from django.templatetags.static import static
@@ -48,8 +49,12 @@ urlpatterns = [
     path('modificar_tablero/', ModificarTablero.as_view(), name="modificar_tablero"),
     path("404/", custom_page_not_found, name="custom_page_not_found"),
     path("500/", custom_server_error, name="custom_server_error"),
-    path('calcular_carga/<id>/', calcular_carga, name="calcular_carga"),
-    
+    path('calcular_carga', calcular_carga, name="calcular_carga"),
+    path('calcular_avance', calcular_avance, name="calcular_avance"),
+    path('mostrar_resumen', mostrar_resumen, name="mostrar_resumen"),
+    path('crear_flujo', crear_flujo, name="crear_flujo"),
+    path('listado_flujo', listado_flujo, name="listado_flujo"),
+    path('ejecutar_flujo', ejecutar_flujo, name="ejecutar_flujo"),  
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
