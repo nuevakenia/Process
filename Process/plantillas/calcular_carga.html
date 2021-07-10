@@ -16,13 +16,14 @@
 
             
         var ctx = document.getElementById('myChart').getContext('2d');
+        var cantidad_verde = {{tareas_verde}}, cantidad_roja = {{tareas_roja}}, cantidad_amarilla ={{tareas_amarilla}};
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Tareas dentro de plazo', 'Tareas con plazo ajustado', 'Tareas atrasadas'],
+                labels: ['Tareas con plazo: '+ {{tareas_verde}}, 'Tareas con plazo ajustado: ' +{{tareas_amarilla}}, 'Tareas atrasadas: '+{{tareas_roja}}],
                 datasets: [{
                     label: '# of Votes',
-                    data: [12, 19, 3],
+                    data: [{{tareas_verde}}, {{tareas_amarilla}}, {{tareas_roja}}],
                     backgroundColor: [
                         'rgba(50, 207, 18, 1)',
                         'rgba(255, 255, 0, 1)',
@@ -58,7 +59,11 @@
     <div class="col-3 my-5">
         <div class="text-center">
             <h1 style="font-size: 42;">Carga de trabajo</h1>
-               <h3> {{ user.username }}</h3>
+            <br>
+               <h3> Usuario: {{ user.username }}</h3>
+               <br>
+              <h4> Total Tareas: {{cantidad_tareas}}</h4>
+              
     <canvas id="myChart" width="200" height="200"></canvas>
     </div>
     </div>

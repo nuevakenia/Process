@@ -345,24 +345,31 @@ class ModificarTablero(View):
 
 def calcular_carga(request):
     user=request.user
-    context = {
-        
-    } 
+
     if request.method == 'GET':
-            Tareas = Tarea.objects.filter(user=user.id).count()
+            
+            tareas_verde = Tarea.objects.filter(user=user.id).filter(estado_avance=0).count()
+            tareas_amarilla = Tarea.objects.filter(user=user.id).filter(estado_avance=1).count()
+            print(tareas_amarilla)
+            tareas_roja = Tarea.objects.filter(user=user.id).filter(estado_avance=2).count()
             cantidad_tareas = Tarea.objects.filter(user=user.id).count()
-            context['cantidad_tareas'] = cantidad_tareas
+            context = {'cantidad_tareas':cantidad_tareas , 'tareas_verde': tareas_verde,
+            'tareas_amarilla': tareas_amarilla, 'tareas_roja': tareas_roja  } 
+            #context['cantidad_tareas'] = cantidad_tareas
     return render(request, "calcular_carga.html", context)
 
 def calcular_avance(request):
-    # TODO
-    context = {
-        
-    } 
+    user=request.user
+
     if request.method == 'GET':
-            tablero = Tablero.objects.filter(id_tablero=id)
-            cantidad_tareas = tablero.count()
-            context['cantidad_tareas'] = cantidad_tareas
+            
+            tareas_tablero = Tarea.objects.filter(user=user.id)
+            tareas_encurso = Tarea.objects.filter(user=user.id).filter(estado=0).count()
+            tareas_finalizadas = Tarea.objects.filter(user=user.id).filter(estado=1).count()
+            cantidad_tareas = Tarea.objects.filter(user=user.id).count()
+            context = {'cantidad_tareas':cantidad_tareas , 'tareas_encurso': tareas_encurso,
+            'tareas_finalizadas': tareas_finalizadas, 'tareas_tablero': tareas_tablero } 
+            #context['cantidad_tareas'] = cantidad_tareas
     return render(request, "calcular_avance.html", context)
 
 def mostrar_resumen(request):
